@@ -1,0 +1,8 @@
+build
+lib/*
+
+bin/*
+
+.DS_Store
+
+add_file.sh
