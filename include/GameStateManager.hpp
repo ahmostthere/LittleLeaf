@@ -19,7 +19,7 @@ Game State Manager uses stack of Game States
 #define GAME_STATE_MANAGER
 
 #include "NodeStack.hpp"
-#include "GameState.hpp"
+#include "GameStates.hpp"
 
 class GameStateManager {
 public:
@@ -32,6 +32,7 @@ public:
 
 private:
     NodeStack<GameState *> m_GameStateStack;
+    GameState *m_currentState;
 };
 
 #endif //GAME_STATE_MANAGER
