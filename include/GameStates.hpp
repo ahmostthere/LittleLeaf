@@ -20,9 +20,8 @@ DESCRIPTION
 
 #include "GameState.hpp"
 
-class MenuState : public GameState
-{
-  public:
+class MenuState : public GameState {
+public:
     ~MenuState();
     void onEnter();
     void onExit();
@@ -30,9 +29,8 @@ class MenuState : public GameState
     void render();
 };
 
-class PlayState : public GameState
-{
-  public:
+class PlayState : public GameState {
+public:
     ~PlayState();
     void onEnter();
     void onExit();
@@ -40,9 +38,8 @@ class PlayState : public GameState
     void render();
 };
 
-class PauseState : public GameState
-{
-  public:
+class PauseState : public GameState {
+public:
     ~PauseState();
     void onEnter();
     void onExit();
@@ -50,14 +47,16 @@ class PauseState : public GameState
     void render();
 };
 
-class OptionsState : public GameState
-{
-  public:
+class OptionsState : public GameState {
+public:
     ~OptionsState();
     void onEnter();
     void onExit();
     void update();
     void render();
 };
+
+// class CutsceneState : public GameState {
+// };
 
 #endif //GAME_STATES

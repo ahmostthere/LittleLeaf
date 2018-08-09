@@ -19,12 +19,10 @@ DESCRIPTION
 #include <iostream>
 
 MenuState::~MenuState() {}
-void MenuState::onEnter()
-{
+void MenuState::onEnter() {
     std::cout << "Enter Menu" << std::endl;
 }
-void MenuState::onExit()
-{
+void MenuState::onExit() {
     std::cout << "Exit Menu" << std::endl;
 }
 void MenuState::update() {
