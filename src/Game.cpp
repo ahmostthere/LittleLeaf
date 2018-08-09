@@ -24,16 +24,9 @@ sf::Clock Game::m_Clock;
 sf::Time Game::m_Time;
 
 GameStateManager Game::t_GameStateManager;
-MenuState *Game::t_MenuState;
-PlayState *Game::t_PlayState;
-PauseState *Game::t_PauseState;
 bool Game::t_Exiting;
 
 void Game::start() {
-    // init game states
-    t_MenuState = new MenuState;
-    t_PlayState = new PlayState;
-    t_PauseState = new PauseState;
 
     load();
     
@@ -45,10 +38,6 @@ void Game::start() {
         render();
     }
 
-    // delete game states;
-    delete t_PauseState;
-    delete t_PlayState;
-    delete t_MenuState;
     
     m_Window.close();
 }
@@ -61,7 +50,7 @@ void Game::load() {
     m_Window.setFramerateLimit(60);
 
 
-    t_GameStateManager.pushState(t_MenuState);
+    t_GameStateManager.pushState(new MenuState);
 }
 
 void Game::handleInputs() {
@@ -89,22 +78,13 @@ void Game::handleKeyPress(sf::Keyboard::Key eventKey) {
             break;
 
         case sf::Keyboard::P:
-            if (t_GameStateManager.currentState() == t_PauseState) {
-                t_GameStateManager.popState();
-            } 
-            else {
-                t_GameStateManager.pushState(t_PauseState);
-            }
+            t_GameStateManager.pushState(new PauseState);
             break;
 
         case sf::Keyboard::I:
-            if (t_GameStateManager.currentState() != t_PlayState) {
-                t_GameStateManager.switchState(t_PlayState);
-            }
             break;
 
         case sf::Keyboard::M:
-            t_GameStateManager.currentState()->say();
             break;
 
         default:
@@ -113,11 +93,14 @@ void Game::handleKeyPress(sf::Keyboard::Key eventKey) {
 }
 
 void Game::update() {
+    t_GameStateManager.currentState()->update();
 }
 
 void Game::render() {
     m_Window.clear();
-    // m_Window.draw(...);
+
+    t_GameStateManager.currentState()->render();
+
     m_Window.display();
 }
 

@@ -49,9 +49,6 @@ private:
     static sf::Time m_Time;
 
     static GameStateManager t_GameStateManager;
-    static MenuState *t_MenuState;
-    static PlayState *t_PlayState;
-    static PauseState *t_PauseState;
     static bool t_Exiting;
 };
 
