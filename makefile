@@ -13,12 +13,12 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -g # -Wall
 # LIB := -L lib -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 LIB := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-INC := -I include
+INC := -I include -I assets
 
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
-	@echo " $(CC) $(C11) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
+	@echo " $(CC) $(C11) $^ -o $(TARGET) $(LIB)"; $(CC) $(C11) $^ -o $(TARGET) $(LIB)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
