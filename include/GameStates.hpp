@@ -24,7 +24,10 @@ class MenuState : public GameState {
 public:
     ~MenuState();
     void onEnter();
+    void onReveal();
+    void onConseal();
     void onExit();
+    void handleInputs();
     void update();
     void render();
 };
@@ -33,7 +36,10 @@ class PlayState : public GameState {
 public:
     ~PlayState();
     void onEnter();
+    void onReveal();
+    void onConseal();
     void onExit();
+    void handleInputs();
     void update();
     void render();
 };
@@ -42,7 +48,10 @@ class PauseState : public GameState {
 public:
     ~PauseState();
     void onEnter();
+    void onReveal();
+    void onConseal();
     void onExit();
+    void handleInputs();
     void update();
     void render();
 };
@@ -51,7 +60,10 @@ class OptionsState : public GameState {
 public:
     ~OptionsState();
     void onEnter();
+    void onReveal();
+    void onConseal();
     void onExit();
+    void handleInputs();
     void update();
     void render();
 };

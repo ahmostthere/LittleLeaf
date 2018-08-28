@@ -25,6 +25,15 @@ void MenuState::onEnter() {
 void MenuState::onExit() {
     std::cout << "Exit Menu" << std::endl;
 }
+void onReveal() {
+
+}
+void onConseal() {
+    
+}
+void MenuState::handleInputs() {
+
+}
 void MenuState::update() {
 
 }
@@ -40,6 +49,15 @@ void PlayState::onEnter() {
 void PlayState::onExit() {
     std::cout << "Exit Play" << std::endl;
 }
+void onReveal() {
+
+}
+void onConseal() {
+    
+}
+void PlayState::handleInputs() {
+
+}
 void PlayState::update() {
 
 }
@@ -54,6 +72,15 @@ void PauseState::onEnter() {
 void PauseState::onExit() {
     std::cout << "Exit Pause" << std::endl;
 }
+void onReveal() {
+    std::cout << "Reveal Pause" << std::endl;
+}
+void onConseal() {
+    std::cout << "Conseal Pause" << std::endl;
+}
+void PauseState::handleInputs() {
+
+}
 void PauseState::update() {
 
 }
@@ -67,6 +94,15 @@ void OptionsState::onEnter() {
 }
 void OptionsState::onExit() {
     std::cout << "Exit Options" << std::endl;
+}
+void onReveal() {
+
+}
+void onConseal() {
+    
+}
+void OptionsState::handleInputs() {
+
 }
 void OptionsState::update() {
 
