@@ -32,6 +32,7 @@ public:
 
 private:
     NodeStack<GameState *> m_GameStateStack;
+    GameState *m_initialState;
     GameState *m_currentState;
 };
 
