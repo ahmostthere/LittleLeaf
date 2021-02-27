@@ -1,7 +1,7 @@
 /*
 FILE
 -----------------------------------------------------------------------------------------------
-GameStates.hpp
+PauseState.hpp
 
 AUTHOR
 -----------------------------------------------------------------------------------------------
@@ -9,29 +9,33 @@ Thomas Tang
 
 DATE
 -----------------------------------------------------------------------------------------------
-2018-08-06
+2019-01-05
 
 DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
-#ifndef GAME_STATES
-#define GAME_STATES
+#ifndef PAUSE_STATE
+#define PAUSE_STATE
 
-#include "GameState.hpp"
-#include "MenuState.hpp"
 #include "PlayState.hpp"
-#include "PauseState.hpp"
 
-class GameStates {
+class PauseState : public PlayState {
 public:
-    GameStates();
+    ~PauseState();
+    void onEnter();
+    void onReveal();
+    void onConseal();
+    void onExit();
+    void handleInputs();
+    void update();
+    void render();
+    
+    friend std::ostream& operator<<(std::ostream& os, const PauseState& _gs) {
+        os << _gs.name;
+        return os;
+    }
 
-    enum State {
-        Menu,
-        Play,
-        Pause
-    };
 };
 
-#endif //GAME_STATES
+#endif //PAUSE_STATE

@@ -16,9 +16,7 @@ DESCRIPTION
 
 */
 template <typename T>
-Node<T>::Node(const T& _data) : m_data(_data), m_next(nullptr) {
-    
-}
+Node<T>::Node(const T& _data) : m_data(_data), m_next(nullptr) { }
 
 template <typename T>
 Node<T>* Node<T>::next() const {

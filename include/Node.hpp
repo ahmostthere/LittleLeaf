@@ -21,6 +21,10 @@ DESCRIPTION
 #include <iostream>
 template <typename T>
 class Node {
+private:
+    T m_data;
+    Node* m_next;
+    
 public:
     Node(const T& _data);
 
@@ -42,10 +46,6 @@ public:
         }
         return os;
     }
-
-private:
-    T m_data;
-    Node* m_next;
 };
 
 #include "Node.inl"

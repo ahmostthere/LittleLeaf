@@ -23,8 +23,9 @@ DESCRIPTION
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-
 #include "GameStateManager.hpp"
+
+// #include "DebugUtils.hpp"
 
 #define WIN_WIDTH 1080
 #define WIN_HEIGHT 720
@@ -39,17 +40,11 @@ private:
     static void handleInputs();
     static void update();
     static void render();
-    static bool isExiting();
 
-    static void handleKeyPress(sf::Keyboard::Key eventKey);
+    // static void handleKeyPress(sf::Keyboard::Key eventKey);
 
-    static sf::ContextSettings m_Settings;
-    static sf::RenderWindow m_Window;
     static sf::Clock m_Clock;
     static sf::Time m_Time;
-
-    static GameStateManager t_GameStateManager;
-    static bool t_Exiting;
 };
 
 #endif // GAME

@@ -22,6 +22,10 @@ DESCRIPTION
 
 template <typename T>
 class NodeStack {
+private:
+    int m_size;
+    Node<T> *m_top;
+    
 public:
     NodeStack();
 
@@ -35,6 +39,8 @@ public:
 
     void push(const T& data);
 
+    void clear();
+
     // used only for testing purposes
     friend std::ostream& operator<< (std::ostream &os, const NodeStack<T> &_stack) {
         os << "[top]-->";
@@ -45,10 +51,6 @@ public:
         }
         return os;
     }
-
-private:
-    int m_size;
-    Node<T> *m_top;
 };
 
 #include "NodeStack.inl"

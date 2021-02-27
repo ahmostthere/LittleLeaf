@@ -17,8 +17,7 @@ DESCRIPTION
 */
 
 template <typename T>
-NodeStack<T>::NodeStack() : m_size(0), m_top(nullptr) {
-} 
+NodeStack<T>::NodeStack() : m_size(0), m_top(nullptr) { } 
 
 template <typename T>
 int NodeStack<T>::size() const {
@@ -37,10 +36,7 @@ const T& NodeStack<T>::top() const {
 
 template <typename T>
 void NodeStack<T>::pop() {
-    // assert m_top neq nullptr ... cannot pop empty list
-    if (empty()) {
-        std::cout << "Stack is empty";
-    } else {
+    if (!empty()) {
         Node<T>* temp = m_top;
         m_top = m_top->next();
         m_size--;
@@ -54,4 +50,11 @@ void NodeStack<T>::push(const T& data) {
     pushed->next(*m_top);
     m_top = pushed;
     m_size++;
+}
+
+template <typename T>
+void NodeStack<T>::clear() {
+    while (!empty()) {
+        pop();
+    }
 }
