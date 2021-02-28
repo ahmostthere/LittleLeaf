@@ -16,12 +16,11 @@ DESCRIPTION
 
 */
 #include "GameState.hpp"
-#include "GameStateManager.hpp"
 
 GameState::~GameState() { }
 
 bool GameState::quit = false;
 
-std::string GameState::name = "Game State";
+GameState::State GameState::nextState;
 
 sf::RenderWindow GameState::m_Window;

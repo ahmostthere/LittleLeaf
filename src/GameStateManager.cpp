@@ -17,56 +17,67 @@ DESCRIPTION
 */
 #include "GameStateManager.hpp"
 
-GameStateManager::GameStateManager() { }
+GameStateManager::GameStateManager() {}
 
 GameStateManager::~GameStateManager() { 
     m_GameStateStack.clear();
 }
 
-GameState* GameStateManager::currentState() {
+GameState* GameStateManager::currentGameState() {
     return m_GameStateStack.top();
 }
 
 void GameStateManager::pushState(GameState *newState) {
     if (!m_GameStateStack.empty()) {
-        currentState()->onConseal();
+        currentGameState()->onConseal();
     }
     m_GameStateStack.push(newState);
-    currentState()->onEnter();
+    currentGameState()->onEnter();
 }
 
 void GameStateManager::popState() {
     if (!empty()) {
-        currentState()->onExit();
+        currentGameState()->onExit();
         m_GameStateStack.pop();
         if (!empty()) {
-            currentState()->onReveal();
+            currentGameState()->onReveal();
         }
     } 
 }
 
 void GameStateManager::switchState(GameState *newState) {
-    currentState()->onConseal();
-
-    m_GameStateStack.pop();
-    m_GameStateStack.push(newState);
-
-    currentState()->onReveal();
+    if (!empty()) {
+        currentGameState()->onConseal();
+        m_GameStateStack.pop();
+        m_GameStateStack.push(newState);
+        currentGameState()->onReveal();
+    } else {
+        m_GameStateStack.push(newState);
+        currentGameState()->onEnter();
+    }
 }
 
 bool GameStateManager::empty() {
     return m_GameStateStack.empty();
 }
 
-void GameStateManager::printSize() {
-    std::cout << m_GameStateStack.size() << std::endl;
-}
+void GameStateManager::goToNextState() {
+    if (currentGameState()->getState() != currentGameState()->nextState) {
+        switch(currentGameState()->nextState) {
+            case GameState::Menu:
+                break;
 
-void GameStateManager::printEmpty() {
-    if (m_GameStateStack.empty()) {
-        std::cout << "Stack Empty" << std::endl;
-    } else {
-        std::cout << "Stack Not Empty" << std::endl;
+            case GameState::Pause:
+                pushState(new PauseState);
+                break;
+
+            case GameState::Play:
+                switchState(new PlayState);
+                break;
+
+            default:
+                break;
+        }
     }
 }
 

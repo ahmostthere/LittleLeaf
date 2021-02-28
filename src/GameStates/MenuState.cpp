@@ -18,7 +18,6 @@ DESCRIPTION
 #include "MenuState.hpp"
 
 MenuState::MenuState() {
-    std::cout << "ENTER INIT MENU STATE" << std::endl;
     if (!menuSplashTexture.loadFromFile("assets/menuSplash.png")) {
         return;
     }
@@ -46,8 +45,10 @@ MenuState::MenuState() {
 
 MenuState::~MenuState() { }
 
+GameState::State MenuState::getState() { return Menu; }
+
 void MenuState::onEnter() {
-    name = "Menu State"; 
+    nextState = Menu;
     m_Window.create(sf::VideoMode(MENU_WIN_WIDTH, MENU_WIN_HEIGHT), "Main Menu");
     std::cout << "Enter Menu State" << std::endl;
 }
@@ -58,7 +59,7 @@ void MenuState::onExit() {
 }
 
 void MenuState::onReveal() {
-    name = "Menu State";
+    nextState = Menu;
     m_Window.create(sf::VideoMode(MENU_WIN_WIDTH, MENU_WIN_HEIGHT), "Main Menu");
     std::cout << "Reveal Menu State" << std::endl;
 }
@@ -80,11 +81,14 @@ void MenuState::handleInputs() {
                 switch (currentEvent.key.code) {
                     case sf::Keyboard::Enter:
                         if (play) {
-                            // Switch to Play State
-                            // GameStateManager::switchState();
+                            nextState = Play;
                         } else {
                             quit = true;
                         }
+                        break;
+
+                    case sf::Keyboard::S: 
+                        std::cout << "In Menu " << nextState << std::endl;
                         break;
 
                     case sf::Keyboard::Escape:
@@ -110,6 +114,8 @@ void MenuState::handleInputs() {
                     default:
                         break;
                 };
+                break;
+
             default:
                 break;
         }

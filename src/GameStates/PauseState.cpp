@@ -20,8 +20,10 @@ DESCRIPTION
 
 PauseState::~PauseState() {}
 
+GameState::State PauseState::getState() { return Pause; }
+
 void PauseState::onEnter() {
-    name = "Pause State";
+    nextState = Pause;
     m_Window.create(sf::VideoMode(1080, 720), "Pause");
     std::cout << "Enter Pause State" << std::endl;
 }
@@ -32,7 +34,7 @@ void PauseState::onExit() {
 }
 
 void PauseState::onReveal() {
-    name = "Pause State";
+    nextState = Pause;
     m_Window.create(sf::VideoMode(1080, 720), "Pause");
     std::cout << "Reveal Pause State" << std::endl;
 }
@@ -43,7 +45,31 @@ void PauseState::onConseal() {
 }
 
 void PauseState::handleInputs() {
+    sf::Event currentEvent;
+    while (m_Window.pollEvent(currentEvent)) {
+        switch (currentEvent.type) {
+            case sf::Event::Closed:
+                quit = true;
+                break;
 
+            case sf::Event::KeyPressed:
+                switch (currentEvent.key.code) {
+                    case sf::Keyboard::S:
+                        std::cout << "In Pause " << nextState << std::endl;
+                        break;
+
+                    case sf::Keyboard::Escape:
+                        quit = true;
+                        break;
+                    default:
+                        break;
+                };
+                break;
+                
+            default:
+                break;
+        }
+    }
 }
 
 void PauseState::update() {

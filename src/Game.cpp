@@ -24,29 +24,18 @@ sf::Time Game::m_Time;
 void Game::start() {
 
     load();
-    while (!GameStateManager::empty() && !GameStateManager::currentState()->quit) {
+    while (!GameStateManager::empty() && !GameStateManager::currentGameState()->quit) {
         m_Time = m_Clock.restart();
-        handleInputs();
-        update();
-        render();
+        GameStateManager::currentGameState()->handleInputs();
+        GameStateManager::currentGameState()->update();
+        GameStateManager::currentGameState()->render();
+        GameStateManager::goToNextState();
     }
-    GameStateManager::currentState()->m_Window.close();
+    GameStateManager::currentGameState()->m_Window.close();
 }
 
 void Game::load() {
     GameStateManager::pushState(new MenuState);
-}
-
-void Game::handleInputs() {
-    GameStateManager::currentState()->handleInputs();
-}
-
-void Game::update() {
-    GameStateManager::currentState()->update();
-}
-
-void Game::render() {
-    GameStateManager::currentState()->render();
 }
 
 /*

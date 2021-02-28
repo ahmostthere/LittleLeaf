@@ -18,9 +18,9 @@ Game State Manager uses stack of Game States
 #ifndef GAME_STATE_MANAGER
 #define GAME_STATE_MANAGER
 
-// #pragma once
-#include "GameStates.hpp"
+#pragma once
 #include "NodeStack.hpp"
+#include "GameStates.hpp"
 
 class GameStateManager {
 private:
@@ -29,19 +29,18 @@ private:
 public:
     GameStateManager();
     ~GameStateManager();
-    static GameState *currentState();
+    static GameState *currentGameState();
     static void pushState(GameState *newState);
     static void popState();
     static void switchState(GameState *newState);
+
     static bool empty();
+    static void goToNextState();
 
-    static void printSize();
-    static void printEmpty();
-
-    friend std::ostream &operator<<(std::ostream &os, const GameStateManager &_gsm) {
-        os << *(_gsm.m_GameStateStack.top());
-        return os;
-    }
+    // friend std::ostream & operator<<(std::ostream &os, const GameStateManager &_gsm) {
+    //     os << *(_gsm.m_GameStateStack.top());
+    //     return os;
+    // }
 };
 
 #endif //GAME_STATE_MANAGER

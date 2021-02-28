@@ -37,10 +37,6 @@ public:
 
 private:
     static void load();
-    static void handleInputs();
-    static void update();
-    static void render();
-
     // static void handleKeyPress(sf::Keyboard::Key eventKey);
 
     static sf::Clock m_Clock;

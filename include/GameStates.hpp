@@ -23,15 +23,4 @@ DESCRIPTION
 #include "PlayState.hpp"
 #include "PauseState.hpp"
 
-class GameStates {
-public:
-    GameStates();
-
-    enum State {
-        Menu,
-        Play,
-        Pause
-    };
-};
-
 #endif //GAME_STATES

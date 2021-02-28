@@ -34,11 +34,7 @@ public:
     void handleInputs();
     void update();
     void render();
-    
-    friend std::ostream& operator<<(std::ostream& os, const MenuState& _gs) {
-        os << _gs.name;
-        return os;
-    }
+    State getState();
 
 private:
     sf::Texture menuSplashTexture;
