@@ -18,18 +18,17 @@ DESCRIPTION
 #include "Game.hpp"
 #include <iostream>
 
-sf::Clock Game::m_Clock;
-sf::Time Game::m_Time;
-
 void Game::start() {
 
     load();
     while (!GameStateManager::empty() && !GameStateManager::currentGameState()->quit) {
-        m_Time = m_Clock.restart();
+        GameStateManager::currentGameState()->resetTimer();
+        // std::cout << GameStateManager::currentGameState()->m_Time.asSeconds() << std::endl;
         GameStateManager::currentGameState()->handleInputs();
         GameStateManager::currentGameState()->update();
         GameStateManager::currentGameState()->render();
         GameStateManager::goToNextState();
+        // std::cout << GameStateManager::currentGameState()->m_Time.asSeconds() << std::endl;
     }
     GameStateManager::currentGameState()->m_Window.close();
 }

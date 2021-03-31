@@ -13,7 +13,7 @@
 #define PI std::acos(-1)
 
 int speed;
-
+ 
 sf::ContextSettings m_Settings;
 sf::RenderWindow m_Window;
 sf::Clock m_Clock;

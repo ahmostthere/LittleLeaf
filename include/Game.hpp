@@ -37,10 +37,7 @@ public:
 
 private:
     static void load();
-    // static void handleKeyPress(sf::Keyboard::Key eventKey);
-
-    static sf::Clock m_Clock;
-    static sf::Time m_Time;
+    
 };
 
 #endif // GAME
