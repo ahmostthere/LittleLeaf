@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "ArrowBtns.hpp"
+// #include "TestQuads.hpp"
 
 #define WIN_WIDTH 1080
 #define WIN_HEIGHT 720
@@ -20,10 +21,11 @@ sf::Clock m_Clock;
 sf::Time m_Time;
 bool t_Exiting;
 
-ArrowBtns t_ArrowBtns;
+// ArrowBtns t_ArrowBtns;
 
+sf::RectangleShape t_Rect;
 sf::CircleShape t_Circle;
-sf::CircleShape t_Circle2;
+// sf::CircleShape t_Circle2;
 sf::CircleShape t_Circle3;
 bool leftPressed, rightPressed;
 
@@ -39,19 +41,24 @@ void oscillate() {
 void load() {
     t_Exiting = false;
 
-    t_ArrowBtns.load();
-    t_ArrowBtns.setPosition(0, 0);
+    // t_ArrowBtns.load();
+    // t_ArrowBtns.setPosition(0, 0);
 
     t_factor = 1;
     t_Circle.setRadius(10);
     t_Circle.setPosition(400, 400);
     t_Circle.setFillColor(sf::Color::Blue);
+    t_Circle.setOutlineThickness(0);
 
-    t_Circle2.setRadius(10);
-    t_Circle2.setPosition(400, 400);
-    t_Circle2.setFillColor(sf::Color::Red);
+    
+    t_Rect.setSize(sf::Vector2f(t_Circle.getLocalBounds().width, t_Circle.getLocalBounds().height));
+    t_Rect.setPosition(450, 450);
+    t_Rect.setFillColor(sf::Color((sf::Uint8)220U, (sf::Uint8)220U, (sf::Uint8)255U, (sf::Uint8)220U));
 
-    t_Circle3.setRadius(10);
+    std::cout << "localBound: " << t_Circle.getLocalBounds().top << "   " << t_Circle.getLocalBounds().left << std::endl;
+    std::cout << "globalBound: " << t_Circle.getGlobalBounds().top << "   " << t_Circle.getGlobalBounds().left << std::endl;
+
+
     t_Circle3.setPosition(500, 500);
     t_Circle3.setFillColor(sf::Color::Green);
 
@@ -111,7 +118,7 @@ void handleKeyPress(sf::Keyboard::Key eventKey) {
 }
 
 void handleContinuous() {
-    t_ArrowBtns.handleInput();
+    // t_ArrowBtns.handleInput();
 }
 
 void handleInputs() {
@@ -145,40 +152,39 @@ void handleInputs() {
 }
 
 void update() {
-    handleContinuous();
+    // handleContinuous();
     
     
 
-    if (leftPressed) {
-        t_Circle3.move(speed * m_Time.asSeconds() * -1, 0);
-    }
-    if (rightPressed) {
-        t_Circle3.move(speed * m_Time.asSeconds(), 0);
-    }
+    // if (leftPressed) {
+    //     t_Circle3.move(speed * m_Time.asSeconds() * -1, 0);
+    // }
+    // if (rightPressed) {
+    //     t_Circle3.move(speed * m_Time.asSeconds(), 0);
+    // }
 }
 
 void render() {
     m_Window.clear();
-    int i = t_contTime.asSeconds();
-    std::cout << "i::" << i << std::endl;
-    if (i % 2) {
-        m_Window.draw(t_Circle);
-        m_Window.draw(t_Circle2);
-    } else {
-        m_Window.draw(t_Circle2);
-        m_Window.draw(t_Circle);
-    }
+    /*
+    // int i = t_contTime.asSeconds();
+    // std::cout << "i::" << i << std::endl;
+    // if (i % 2) {
+    //     m_Window.draw(t_Circle);
+    //     m_Window.draw(t_Circle2);
+    // } else {
+    //     m_Window.draw(t_Circle2);
+    //     m_Window.draw(t_Circle);
+    // }
+    */
     
+    m_Window.draw(t_Circle);
+    // m_Window.draw(t_Circle2);
     m_Window.draw(t_Circle3);
-    m_Window.draw(t_ArrowBtns);
+    m_Window.draw(t_Rect);
+    // m_Window.draw(t_ArrowBtns);
 
     m_Window.display();
-}
-
-void loop() {
-    handleInputs();
-    update();
-    render();
 }
 
 void start() {
@@ -191,8 +197,10 @@ void start() {
         t_contTime += m_Time;
         // std::cout << t_factor << std::endl;
 
-        t_Circle.setPosition(400 + (60 * std::cos(PI * t_contTime.asSeconds() / t_factor)), 400);
-        loop();
+        // t_Circle.setPosition(400 + (60 * std::cos(PI * t_contTime.asSeconds() / t_factor)), 400);
+        handleInputs();
+        update();
+        render();
     }
 
     // exit
@@ -201,11 +209,60 @@ void start() {
 
 
 
+template <typename T, typename U>
+class QuadNode {
+
+    struct QuadLeaf {
+        sf::Vector2<T> m_point;
+        U m_data;
+    };
+
+    sf::Rect<T> m_quadRect;
+
+    QuadLeaf* m_leaf = nullptr;
+
+    QuadNode *topLeft;
+    QuadNode *topRight;
+    QuadNode *botLeft;
+    QuadNode *botRight;
+
+public:
+    QuadNode() {
+        m_quadRect = sf::Rect<T>(0,0,0,0);
+        m_leaf = nullptr;
+        topLeft = nullptr;
+        topRight = nullptr;
+        botLeft = nullptr;
+        botRight = nullptr;
+    }
+
+    QuadNode(sf::Rect<T> rect) {
+        m_quadRect = rect;
+        m_leaf = nullptr;
+        topLeft = nullptr;
+        topRight = nullptr;
+        botLeft = nullptr;
+        botRight = nullptr;
+    }
+
+    bool contains(sf::Vector2f point) {
+        return (point.x >= m_quadRect.left && point.x <= m_quadRect.left + m_quadRect.width &&
+                point.y >= m_quadRect.top && point.y <= m_quadRect.top + m_quadRect.height)
+    }
+
+    bool contains(sf::Vector2f point) {
+        return (point.x >= m_tl.x && point.x <= m_br.x &&
+                point.y >= m_tl.y && point.y <= m_br.y)
+    }
+
+    void insert (QuadLeaf *leaf) {
+        if (leaf == nullptr) return;
 
 
 
+    }
 
-
+};
 
 
 
@@ -213,4 +270,7 @@ int main() {
     start();
 
     return 0;
+
+    sf::FloatRect FR = sf::FloatRect(0, 0, 10, 10);
+ 
 }
