@@ -17,27 +17,32 @@ DESCRIPTION
 */
 
 template <typename T>
-NodeStack<T>::NodeStack() : m_size(0), m_top(nullptr) { } 
+NodeStack<T>::NodeStack() : m_size(0), m_top(nullptr) {}
 
 template <typename T>
-int NodeStack<T>::size() const {
+int NodeStack<T>::size() const
+{
     return m_size;
 }
 
 template <typename T>
-bool NodeStack<T>::empty() const {
+bool NodeStack<T>::empty() const
+{
     return m_size == 0;
 }
 
 template <typename T>
-const T& NodeStack<T>::top() const {
+const T &NodeStack<T>::top() const
+{
     return m_top->data();
 }
 
 template <typename T>
-void NodeStack<T>::pop() {
-    if (!empty()) {
-        Node<T>* temp = m_top;
+void NodeStack<T>::pop()
+{
+    if (!empty())
+    {
+        Node<T> *temp = m_top;
         m_top = m_top->next();
         m_size--;
         delete temp;
@@ -45,16 +50,19 @@ void NodeStack<T>::pop() {
 }
 
 template <typename T>
-void NodeStack<T>::push(const T& data) {
-    Node<T>* pushed = new Node<T>(data);
+void NodeStack<T>::push(const T &data)
+{
+    Node<T> *pushed = new Node<T>(data);
     pushed->next(*m_top);
     m_top = pushed;
     m_size++;
 }
 
 template <typename T>
-void NodeStack<T>::clear() {
-    while (!empty()) {
+void NodeStack<T>::clear()
+{
+    while (!empty())
+    {
         pop();
     }
 }

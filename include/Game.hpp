@@ -31,13 +31,13 @@ DESCRIPTION
 #define WIN_HEIGHT 720
 #define MS_PER_UPDATE 0.011
 
-class Game {
+class Game
+{
 public:
     static void start();
 
 private:
     static void load();
-    
 };
 
 #endif // GAME

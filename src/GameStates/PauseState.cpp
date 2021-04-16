@@ -17,66 +17,74 @@ DESCRIPTION
 */
 #include "PauseState.hpp"
 
-
 PauseState::~PauseState() {}
 
 GameState::State PauseState::getState() { return Pause; }
 
-void PauseState::onEnter() {
+void PauseState::onEnter()
+{
     nextState = Pause;
     m_Window.create(sf::VideoMode(1080, 720), "Pause");
     std::cout << "Enter Pause State" << std::endl;
 }
 
-void PauseState::onExit() {
+void PauseState::onExit()
+{
     m_Window.close();
     std::cout << "Exit Pause State" << std::endl;
 }
 
-void PauseState::onReveal() {
+void PauseState::onReveal()
+{
     nextState = Pause;
     m_Window.create(sf::VideoMode(1080, 720), "Pause");
     std::cout << "Reveal Pause State" << std::endl;
 }
 
-void PauseState::onConseal() {
+void PauseState::onConseal()
+{
     m_Window.close();
     std::cout << "Conseal Pause State" << std::endl;
 }
 
-void PauseState::handleInputs() {
+void PauseState::handleInputs()
+{
     sf::Event currentEvent;
-    while (m_Window.pollEvent(currentEvent)) {
-        switch (currentEvent.type) {
-            case sf::Event::Closed:
+    while (m_Window.pollEvent(currentEvent))
+    {
+        switch (currentEvent.type)
+        {
+        case sf::Event::Closed:
+            quit = true;
+            break;
+
+        case sf::Event::KeyPressed:
+            switch (currentEvent.key.code)
+            {
+            case sf::Keyboard::S:
+                std::cout << "In Pause " << nextState << std::endl;
+                break;
+
+            case sf::Keyboard::Escape:
                 quit = true;
                 break;
-
-            case sf::Event::KeyPressed:
-                switch (currentEvent.key.code) {
-                    case sf::Keyboard::S:
-                        std::cout << "In Pause " << nextState << std::endl;
-                        break;
-
-                    case sf::Keyboard::Escape:
-                        quit = true;
-                        break;
-                    default:
-                        break;
-                };
-                break;
-                
             default:
                 break;
+            };
+            break;
+
+        default:
+            break;
         }
     }
 }
 
-void PauseState::update() {
-
+void PauseState::update()
+{
 }
 
-void PauseState::render() {
+void PauseState::render()
+{
     m_Window.clear();
 
     m_Window.display();

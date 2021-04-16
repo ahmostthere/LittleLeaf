@@ -105,7 +105,7 @@ public:
                     topLeftTree = new Quad(
                         Point(topLeft.x, topLeft.y),
                         Point((topLeft.x + botRight.x) / 2,
-                            (topLeft.y + botRight.y) / 2));
+                              (topLeft.y + botRight.y) / 2));
                 topLeftTree->insert(node);
             }
 
@@ -115,9 +115,9 @@ public:
                 if (botLeftTree == NULL)
                     botLeftTree = new Quad(
                         Point(topLeft.x,
-                            (topLeft.y + botRight.y) / 2),
+                              (topLeft.y + botRight.y) / 2),
                         Point((topLeft.x + botRight.x) / 2,
-                            botRight.y));
+                              botRight.y));
                 botLeftTree->insert(node);
             }
         }
@@ -129,9 +129,9 @@ public:
                 if (topRightTree == NULL)
                     topRightTree = new Quad(
                         Point((topLeft.x + botRight.x) / 2,
-                            topLeft.y),
+                              topLeft.y),
                         Point(botRight.x,
-                            (topLeft.y + botRight.y) / 2));
+                              (topLeft.y + botRight.y) / 2));
                 topRightTree->insert(node);
             }
 
@@ -141,7 +141,7 @@ public:
                 if (botRightTree == NULL)
                     botRightTree = new Quad(
                         Point((topLeft.x + botRight.x) / 2,
-                            (topLeft.y + botRight.y) / 2),
+                              (topLeft.y + botRight.y) / 2),
                         Point(botRight.x, botRight.y));
                 botRightTree->insert(node);
             }

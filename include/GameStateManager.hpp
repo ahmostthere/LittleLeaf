@@ -22,7 +22,8 @@ Game State Manager uses stack of Game States
 #include "NodeStack.hpp"
 #include "GameStates.hpp"
 
-class GameStateManager {
+class GameStateManager
+{
 private:
     static NodeStack<GameState *> m_GameStateStack;
 

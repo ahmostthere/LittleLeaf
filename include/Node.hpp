@@ -20,28 +20,33 @@ DESCRIPTION
 
 #include <iostream>
 template <typename T>
-class Node {
+class Node
+{
 private:
     T m_data;
-    Node* m_next;
-    
+    Node *m_next;
+
 public:
-    Node(const T& _data);
+    Node(const T &_data);
 
-    Node<T>* next() const;
+    Node<T> *next() const;
 
-    const T& data() const;
+    const T &data() const;
 
-    void next(Node<T>& _next);
+    void next(Node<T> &_next);
 
-    void data(const T& _data);
+    void data(const T &_data);
 
-    friend std::ostream& operator<< (std::ostream& os, const Node<T>& _node) {
-        os << "[" <<  _node.data() << "]";
+    friend std::ostream &operator<<(std::ostream &os, const Node<T> &_node)
+    {
+        os << "[" << _node.data() << "]";
         os << "-->";
-        if (_node.next() == nullptr) {
+        if (_node.next() == nullptr)
+        {
             os << "[/]";
-        } else {
+        }
+        else
+        {
             os << *_node.next();
         }
         return os;

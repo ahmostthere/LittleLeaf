@@ -21,11 +21,12 @@ DESCRIPTION
 #include "Node.hpp"
 
 template <typename T>
-class NodeStack {
+class NodeStack
+{
 private:
     int m_size;
     Node<T> *m_top;
-    
+
 public:
     NodeStack();
 
@@ -37,16 +38,20 @@ public:
 
     void pop();
 
-    void push(const T& data);
+    void push(const T &data);
 
     void clear();
 
     // used only for testing purposes
-    friend std::ostream& operator<< (std::ostream &os, const NodeStack<T> &_stack) {
+    friend std::ostream &operator<<(std::ostream &os, const NodeStack<T> &_stack)
+    {
         os << "[top]-->";
-        if (!_stack.empty()){
+        if (!_stack.empty())
+        {
             os << *_stack.m_top;
-        } else {
+        }
+        else
+        {
             os << "[/]";
         }
         return os;

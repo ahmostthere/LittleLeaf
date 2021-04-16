@@ -18,10 +18,12 @@ DESCRIPTION
 #include "Game.hpp"
 #include <iostream>
 
-void Game::start() {
+void Game::start()
+{
 
     load();
-    while (!GameStateManager::empty() && !GameStateManager::currentGameState()->quit) {
+    while (!GameStateManager::empty() && !GameStateManager::currentGameState()->quit)
+    {
         GameStateManager::currentGameState()->resetTimer();
         // std::cout << GameStateManager::currentGameState()->m_Time.asSeconds() << std::endl;
         GameStateManager::currentGameState()->handleInputs();
@@ -33,12 +35,14 @@ void Game::start() {
     GameStateManager::currentGameState()->m_Window.close();
 }
 
-void Game::load() {
+void Game::load()
+{
     GameStateManager::pushState(new MenuState);
 }
 
 /*
-void Game::handleKeyPress(sf::Keyboard::Key eventKey) {
+void Game::handleKeyPress(sf::Keyboard::Key eventKey) 
+{
     switch (eventKey) {
         case sf::Keyboard::Escape:
             break;

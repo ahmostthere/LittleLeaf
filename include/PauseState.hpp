@@ -20,7 +20,8 @@ DESCRIPTION
 
 #include "PlayState.hpp"
 
-class PauseState : public PlayState {
+class PauseState : public PlayState
+{
 public:
     ~PauseState();
     void onEnter();
@@ -31,7 +32,6 @@ public:
     void update();
     void render();
     State getState();
-
 };
 
 #endif //PAUSE_STATE

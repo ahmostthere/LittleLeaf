@@ -22,18 +22,20 @@ DESCRIPTION
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
-class GameState {
+class GameState
+{
 public:
-    enum State {
+    enum State
+    {
         Menu,
         Play,
         Pause
     };
     virtual ~GameState();
-    virtual void onEnter() = 0; // Enters Stack on State Push
-    virtual void onReveal() = 0; // Obtain Top position on State Pop
+    virtual void onEnter() = 0;   // Enters Stack on State Push
+    virtual void onReveal() = 0;  // Obtain Top position on State Pop
     virtual void onConseal() = 0; // Relieve Top position on State Push
-    virtual void onExit() = 0;     // Exits Stack on State Pop
+    virtual void onExit() = 0;    // Exits Stack on State Pop
     virtual State getState() = 0;
 
     virtual void handleInputs() = 0;
@@ -52,7 +54,6 @@ public:
     //     os << _gs.name;
     //     return os;
     // }
-
 };
 
 #endif //GAME_STATE

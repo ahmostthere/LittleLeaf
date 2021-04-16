@@ -21,9 +21,10 @@ DESCRIPTION
 #include "GameState.hpp"
 
 #define MENU_WIN_WIDTH 1920
-#define MENU_WIN_HEIGHT 1080 
+#define MENU_WIN_HEIGHT 1080
 
-class MenuState : public GameState {
+class MenuState : public GameState
+{
 public:
     MenuState();
     ~MenuState();
@@ -44,7 +45,6 @@ private:
     sf::Sprite playSprite;
     sf::Sprite quitSprite;
     bool play;
-
 };
 
 #endif //MENU_STATE

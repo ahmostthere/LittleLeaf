@@ -1,3 +1,24 @@
+# GamePlay
+
+Inspired by League of Legends
+
+## Map zones
+
+> A map zone is a chunk of map that is fully loaded, resourses and all.
+> Can pan across map using mouse
+> Player movement with mouse right click
+> Auto-attack depending on weapon held
+> 'QWER' skill abilities
+> 'F' for interactions
+> "Fog of War" when out of visibile distance (Game View)
+
+## Draw order
+
+1. Tiles
+2. Game Objects (Trees, Plants, Buildings, Enemies, Characters, etc.)
+3. Weather (Rain Effect, Sunny Effect, Cloudy Effect, Snowing Effect, etc.)
+4. Player Visibility (Fog of War) // Kind of like a dark grey filter with a blur the further you are from your Character
+
 # Setting
 
 Explorers are first summoned in any of the 5 regions

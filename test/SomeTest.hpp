@@ -5,122 +5,33 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include "Quad.hpp"
+#include "DragSelect.hpp"
+#include "Tile.hpp"
 #include <iostream>
 #include <cmath>
 
 // #define WIN_WIDTH 480
 // #define WIN_HEIGHT 270
 // #define TILE_SIZE 30
-#define WIN_WIDTH 640
-#define WIN_HEIGHT 640
-#define TILE_SIZE 160
+#define WIN_WIDTH 900
+#define WIN_HEIGHT 600
+#define TILE_SIZE 30
 
-// Quad Stuff
-class QuadNode {
+class Testing
+{
 public:
-    sf::Transformable obj;
-    QuadNode(sf::Transformable _obj) {
-        obj = _obj;
-    }
-};
-
-class Quad {
-public:
-    sf::FloatRect quadRect;
-    QuadNode *node;
-    Quad *tLQuad, *tRQuad, *bLQuad, *bRQuad;
-    sf::Vector2f minSz;
-
-    Quad() {
-        quadRect = sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(0, 0));
-        minSz = sf::Vector2f(TILE_SIZE, TILE_SIZE);
-        node = nullptr;
-        tLQuad = nullptr;
-        tRQuad = nullptr;
-        bLQuad = nullptr;
-        bRQuad = nullptr;
-    }
+    // static sf::RectangleShape t_gameBoard[WIN_WIDTH / TILE_SIZE][WIN_HEIGHT / TILE_SIZE];
+    static Tile t_gameBoard[WIN_WIDTH / TILE_SIZE][WIN_HEIGHT / TILE_SIZE];
+    static sf::CircleShape t_mouseCircle;
+    static sf::RectangleShape t_rotateSquare;
+    static DragSelect t_dragSelect;
+    static Quad<Tile *> *t_GameBoardQuad;
     
-    Quad(sf::FloatRect _quadRect, sf::Vector2f _minSz = sf::Vector2f(TILE_SIZE, TILE_SIZE)) {
-        quadRect = _quadRect;
-        minSz = _minSz; 
-        node = nullptr;
-        tLQuad = nullptr;
-        tRQuad = nullptr;
-        bLQuad = nullptr;
-        bRQuad = nullptr;
-    }
-
-    void insert(QuadNode *_node) {
-        if (_node == nullptr) return;
-
-        std::cout << _node->obj.getPosition().x << ", " << _node->obj.getPosition().y << std::endl;
-        std::cout << "QUAD TL: " << quadRect.left << ", " << quadRect.top << std::endl;
-        std::cout << "QUAD BR: " << quadRect.left + quadRect.width << ", " << quadRect.top + quadRect.height << std::endl;
-
-        if (!quadRect.contains(_node->obj.getPosition())) return;
-            
-        
-        if (quadRect.width <= 3 && quadRect.height <= 3) {
-            if (node == nullptr) {
-                node = _node;
-                std::cout << "inserted" << std::endl;
-            }
-            return;
-        }
-        
-        if (_node->obj.getPosition().y <= quadRect.top + (quadRect.height / 2)) { // T
-            if (_node->obj.getPosition().x <= quadRect.left + (quadRect.width / 2)) { // L
-                if (tLQuad == nullptr) {
-                    tLQuad = new Quad(
-                        sf::FloatRect(
-                            sf::Vector2f(quadRect.left, quadRect.top),
-                            sf::Vector2f(quadRect.width / 2, quadRect.height / 2)));
-                    tLQuad->insert(_node);
-                }
-            } else { // R
-                if (tRQuad == nullptr) {
-                    tRQuad = new Quad(
-                        sf::FloatRect(
-                            sf::Vector2f(quadRect.left + (quadRect.width / 2), quadRect.top),
-                            sf::Vector2f(quadRect.width / 2, quadRect.height / 2)));
-                    tRQuad->insert(_node);
-                }
-            }
-        } else { // B
-            if (_node->obj.getPosition().x <= quadRect.left + (quadRect.width / 2))
-            { // L
-                if (bLQuad == nullptr) {
-                    bLQuad = new Quad(
-                        sf::FloatRect(
-                            sf::Vector2f(quadRect.left, quadRect.top + (quadRect.height / 2)),
-                            sf::Vector2f(quadRect.width / 2, quadRect.height / 2)));
-                    bLQuad->insert(_node);
-                }
-            }
-            else
-            { // R
-                if (bRQuad == nullptr) {
-                    bRQuad = new Quad(
-                        sf::FloatRect(
-                            sf::Vector2f(quadRect.left + (quadRect.width / 2), quadRect.top + (quadRect.height / 2)),
-                            sf::Vector2f(quadRect.width / 2, quadRect.height / 2)));
-                    bRQuad->insert(_node);
-                }
-            }
-        }
-    }
-};
-
-
-class Testing {
-public:
-    static sf::RectangleShape gameBoard[WIN_WIDTH / TILE_SIZE][WIN_HEIGHT / TILE_SIZE];
-    static sf::CircleShape mouseCircle;
-    static sf::RenderWindow t_window;
-    static bool t_isQuitting;
+    
+    static sf::RenderWindow m_window;
+    static bool m_isQuitting;
     static void load();
-    static Quad *t_quad;
 
     static void handleInput();
     static void update();
@@ -129,67 +40,157 @@ public:
     static void quit();
 };
 
-sf::RectangleShape Testing::gameBoard[WIN_WIDTH / TILE_SIZE][WIN_HEIGHT / TILE_SIZE];
-sf::CircleShape Testing::mouseCircle;
-sf::RenderWindow Testing::t_window;
-bool Testing::t_isQuitting;
-Quad *Testing::t_quad = new Quad(sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(WIN_WIDTH, WIN_HEIGHT)));
+Tile Testing::t_gameBoard[WIN_WIDTH / TILE_SIZE][WIN_HEIGHT / TILE_SIZE];
+sf::CircleShape Testing::t_mouseCircle;
+sf::RectangleShape Testing::t_rotateSquare;
+
+DragSelect Testing::t_dragSelect;
+
+sf::RenderWindow Testing::m_window;
+bool Testing::m_isQuitting;
+Quad<Tile *> *Testing::t_GameBoardQuad = new Quad<Tile *>(sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(WIN_WIDTH, WIN_HEIGHT)));
 
 void Testing::load()
 {
     // Load / initialize other static variables
-    for (int i = 0; i < sizeof(gameBoard) / sizeof(gameBoard[0]); i++) {
-        for (int j = 0; j < sizeof(gameBoard[0]) / sizeof(sf::RectangleShape); j++) {
-            gameBoard[i][j].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
-            gameBoard[i][j].setPosition(sf::Vector2f((i * TILE_SIZE) + (TILE_SIZE / 2), (j * TILE_SIZE) + (TILE_SIZE / 2)));
-            gameBoard[i][j].setOrigin(sf::Vector2f(TILE_SIZE/2, TILE_SIZE/2));
-            gameBoard[i][j].setFillColor(
-                (i % 2) ? ((j % 2) ? sf::Color::White : sf::Color(150, 150, 150)) : ((j % 2) ? sf::Color(150, 150, 150) : sf::Color::White));
-            gameBoard[i][j].setOutlineColor(sf::Color::Black);
-            gameBoard[i][j].setOutlineThickness(1);
-            t_quad->insert(new QuadNode(gameBoard[i][j]));
+    for (int i = 0; i < sizeof(t_gameBoard) / sizeof(t_gameBoard[0]); i++)
+    {
+        for (int j = 0; j < sizeof(t_gameBoard[0]) / sizeof(Tile); j++)
+        {
+            t_gameBoard[i][j].setSize(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+            t_gameBoard[i][j].setPosition(sf::Vector2f((i * TILE_SIZE) + (TILE_SIZE / 2), (j * TILE_SIZE) + (TILE_SIZE / 2)));
+            t_gameBoard[i][j].setOrigin(sf::Vector2f(TILE_SIZE / 2, TILE_SIZE / 2));
+            // t_gameBoard[i][j].setFillColor(
+            //     // (i % 2) ? ((j % 2) ? sf::Color::White : sf::Color(150, 150, 150)) : ((j % 2) ? sf::Color(150, 150, 150) : sf::Color::White)
+            //     sf::Color::White
+            // );
+            // t_gameBoard[i][j].setOutlineColor(sf::Color::Black);
+            // t_gameBoard[i][j].setOutlineThickness(1);
+            t_GameBoardQuad->insert(new Quad<Tile *>::Node(&t_gameBoard[i][j], t_gameBoard[i][j].getPosition()));
         }
     }
 
+    t_mouseCircle.setFillColor(sf::Color(220, 0, 0, 55));
+    t_mouseCircle.setRadius(100);
+    t_mouseCircle.setOrigin(sf::Vector2f(t_mouseCircle.getRadius(), t_mouseCircle.getRadius()));
 
-    mouseCircle.setFillColor(sf::Color(220, 0, 0, 55));
-    mouseCircle.setRadius(100);
-    mouseCircle.setOrigin(sf::Vector2f(mouseCircle.getRadius(), mouseCircle.getRadius()));
+    t_rotateSquare.setFillColor(sf::Color::Green);
+    t_rotateSquare.setPosition(100, 100);
+    t_rotateSquare.setOrigin(t_rotateSquare.getSize().x / 2, t_rotateSquare.getSize().y / 2);
+    t_rotateSquare.setSize(sf::Vector2f(120, 120));
 
 
 
-    t_isQuitting = false;
 
-    t_window.create(
+    m_isQuitting = false;
+
+    m_window.create(
         sf::VideoMode(WIN_WIDTH, WIN_HEIGHT), "TEST",
         sf::Style::Close);
-    t_window.setFramerateLimit(60);
+    m_window.setFramerateLimit(60);
 }
-
 
 void Testing::handleInput()
 {
     sf::Event curEvent;
-    while (t_window.pollEvent(curEvent)) {
-        switch (curEvent.type) {
+    while (m_window.pollEvent(curEvent))
+    {
+        switch (curEvent.type)
+        {
             case sf::Event::Closed:
-                t_isQuitting = true;
+                m_isQuitting = true;
                 break;
 
             case sf::Event::KeyPressed:
-                switch (curEvent.key.code) {
+            {
+                switch (curEvent.key.code)
+                {
                     case sf::Keyboard::Escape:
-                        t_isQuitting = true;
+                        m_isQuitting = true;
                         break;
+
+                    case sf::Keyboard::Up:
+                        t_rotateSquare.setRotation(t_rotateSquare.getRotation() + 1);
+                        break;
+
+                    case sf::Keyboard::L:
+                        std::cout << "local: ";
+                        std::cout << t_rotateSquare.getLocalBounds().width << ", ";
+                        std::cout << t_rotateSquare.getLocalBounds().height << std::endl;
+                        break;
+
+                    case sf::Keyboard::O:
+                        std::cout << "global: ";
+                        std::cout << t_rotateSquare.getGlobalBounds().width << ", ";
+                        std::cout << t_rotateSquare.getGlobalBounds().height << std::endl;
+                        break;
+
+                    case sf::Keyboard::P:
+                        t_GameBoardQuad->printQuads();
+
+                    case sf::Keyboard::S:
+                    {
+                        int num = (sizeof(t_gameBoard) / sizeof(t_gameBoard[0])) / 3;
+                        int num2 = (sizeof(t_gameBoard[0]) / sizeof(Tile)) / 3;
+                        for (int i = num; i < num * 2; i++) 
+                        {
+                            for (int j = num2; j < num2 * 2; j++) 
+                            {
+                                t_gameBoard[i][j].select();
+                            }
+                        }
+                        break;
+                    }
+
+                    case sf::Keyboard::D:
+                    {
+                        int num = (sizeof(t_gameBoard) / sizeof(t_gameBoard[0])) / 3;
+                        int num2 = (sizeof(t_gameBoard[0]) / sizeof(Tile)) / 3;
+                        for (int i = num; i < num * 2; i++) 
+                        {
+                            for (int j = num2; j < num2 * 2; j++) 
+                            {
+                                t_gameBoard[i][j].deselect();
+                            }
+                        }
+                        break;
+                    }
 
                     default:
                         break;
                 }
                 break;
-            
+            }
+
             case sf::Event::Resized:
-                // t_window.setView();
+                // m_window.setView();
                 break;
+
+            case sf::Event::MouseButtonPressed:
+            {
+                t_dragSelect.start(m_window);
+                std::cout << "mouse pressed" << std::endl;
+                
+                break;
+            }
+
+            case sf::Event::MouseButtonReleased:
+            {
+                std::vector<Quad<Tile *>::Node *>
+                    them = t_GameBoardQuad->search(t_dragSelect.getPosition().x,
+                                                   t_dragSelect.getPosition().y,
+                                                   t_dragSelect.getPosition().x + t_dragSelect.getSize().x,
+                                                   t_dragSelect.getPosition().y + t_dragSelect.getSize().y);
+
+                std::cout << them.size() << std::endl;
+                for (int i = 0; i < them.size(); i++)
+                {
+                    them[i]->data()->isSelected() ? them[i]->data()->deselect() : them[i]->data()->select();
+                }
+                t_dragSelect.end();
+
+                break;
+            }
 
             default:
                 break;
@@ -197,42 +198,50 @@ void Testing::handleInput()
     }
 }
 
-
 void Testing::update()
 {
     //  Update stuff
-    mouseCircle.setPosition((sf::Vector2f)sf::Mouse::getPosition(t_window));
+    t_mouseCircle.setPosition((sf::Vector2f)sf::Mouse::getPosition(m_window));
 
+    t_dragSelect.update(m_window);
+    for (int i = 0; i < sizeof(t_gameBoard) / sizeof(t_gameBoard[0]); i++)
+    {
+        for (int j = 0; j < sizeof(t_gameBoard[0]) / sizeof(Tile); j++)
+        {
+            t_gameBoard[i][j].update();
+        }
+    }
 }
-
 
 void Testing::render()
 {
-    t_window.clear();
+    m_window.clear();
 
     // Draw stuff
-    // t_window.draw([somestuff])
-    for (int i = 0; i < sizeof(gameBoard) / sizeof(gameBoard[0]); i++) {
-        for (int j = 0; j < sizeof(gameBoard[0]) / sizeof(sf::RectangleShape); j++) {
-            t_window.draw(gameBoard[i][j]);
+    // m_window.draw([somestuff])
+    for (int i = 0; i < sizeof(t_gameBoard) / sizeof(t_gameBoard[0]); i++)
+    {
+        for (int j = 0; j < sizeof(t_gameBoard[0]) / sizeof(Tile); j++)
+        {
+            m_window.draw(t_gameBoard[i][j]);
         }
     }
 
-    t_window.draw(mouseCircle);
-    
-    t_window.display();
-}
+    m_window.draw(t_rotateSquare);
+    m_window.draw(t_mouseCircle);
+    m_window.draw(t_dragSelect);
 
+    m_window.display();
+}
 
 bool Testing::quitting()
 {
-    return t_isQuitting;
+    return m_isQuitting;
 }
-
 
 void Testing::quit()
 {
-    t_window.close();
+    m_window.close();
 }
 
 #endif

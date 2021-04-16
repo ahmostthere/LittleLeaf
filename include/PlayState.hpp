@@ -24,7 +24,8 @@ DESCRIPTION
 #define PLAY_WIN_WIDTH 1920
 #define PLAY_WIN_HEIGHT 1080
 
-class PlayState : public GameState {
+class PlayState : public GameState
+{
 public:
     ~PlayState();
     void onEnter();

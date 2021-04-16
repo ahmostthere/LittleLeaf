@@ -17,9 +17,10 @@ DESCRIPTION
 */
 #include "GameState.hpp"
 
-GameState::~GameState() { }
+GameState::~GameState() {}
 
-void GameState::resetTimer() {
+void GameState::resetTimer()
+{
     m_Time = m_Clock.restart();
 }
 

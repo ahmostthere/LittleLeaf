@@ -4,7 +4,8 @@
 #include "Collidable.hpp"
 // Characters are collidable objects
 
-class Character : public Collidable {
+class Character : public Collidable
+{
 public:
     int health;
 };
