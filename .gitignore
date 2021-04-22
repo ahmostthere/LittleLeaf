@@ -10,3 +10,4 @@ makefile
 run.sh
 add_file.sh
 
+SFML/*
