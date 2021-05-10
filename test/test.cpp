@@ -1,6 +1,7 @@
 #include "SomeTest.hpp"
 
-void start() {
+void start() 
+{
     Testing::load();
 
     while(!Testing::quitting()) {
@@ -11,9 +12,34 @@ void start() {
     Testing::quit();
 }
 
+class Something 
+{
+private: 
+    int parts;
+public:
+    Something() 
+    {
+        parts = 0;    
+    }
 
-int main() {
+    Something(int _parts)
+    {
+        parts = _parts;
+    }
+
+    friend int show(Something);
+};
+
+int show(Something s) {
+    return s.parts;
+}
+
+
+int main() 
+{
     start();
+    // Something s(5);
+    // std::cout << show(s) << std::endl;
 
 
     // sf::RectangleShape one;
@@ -27,8 +53,8 @@ int main() {
     // root->insert(new Quad<sf::Transformable>::Node(two, two.getPosition()));
 
 
-
     // root->printQuads();
+    // delete root;
 
     return 0;
 }

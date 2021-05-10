@@ -63,6 +63,10 @@ public:
             y = _pos.y;
         }
 
+        ~Node() 
+        {
+        }
+
         void data(const T& _data) 
         {
             m_data = _data;
@@ -193,6 +197,27 @@ public:
         bRQuad = nullptr;
     }
 
+    ~Quad()
+    {
+        if (node) 
+            delete node;
+        if (tLQuad) 
+        {
+            delete tLQuad;
+        }
+        if (tRQuad) 
+        {
+            delete tRQuad;
+        }
+        if (bLQuad) 
+        {
+            delete bLQuad;
+        }
+        if (bRQuad) 
+        {
+            delete bRQuad;
+        }
+    }
     
     bool contains(sf::Vector2f point)
     {
@@ -294,9 +319,24 @@ public:
 
     // }
 
-    std::vector<Node*> search(float _left, float _top, float _right, float _bottom)
+    friend std::vector<Node *> qSearch(float _left, float _top, float _right, float _bottom, Quad *quad);
+    
+    std::vector<Node *> search(float _left, float _top, float _right, float _bottom)
     {   
         std::vector<Node*> results;
+        if (_bottom < _top) 
+        {
+            float t = _bottom;
+            _bottom = _top;
+            _top = t;
+        }
+        if (_right < _left)
+        {
+            float t = _left;
+            _left = _right;
+            _right = t;
+        }
+
         if (_bottom < top)
             return results;
         if (_top > bottom)

@@ -57,7 +57,6 @@ public:
 
     void update()
     {
-        // m_highlight.setOutlineThickness(m_isSelected ? -2 : 0);
         m_highlight.setFillColor(m_isSelected ? sf::Color(0, 200, 200) : sf::Color::Transparent);
     }
 
@@ -99,6 +98,11 @@ public:
     bool contains(const sf::Vector2f &point)
     {
         return m_tile.getLocalBounds().contains(point);
+    }
+
+    bool intersects(const sf::FloatRect &rectangle)
+    {
+        return m_tile.getLocalBounds().intersects(rectangle);
     }
 };
 

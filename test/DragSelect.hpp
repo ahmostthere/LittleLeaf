@@ -12,8 +12,11 @@ private:
     sf::RectangleShape m_highlight;
     sf::Vector2f m_startPos;
     sf::Vector2f m_endPos;
+    sf::Window *m_window;
 
-    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
+        virtual void
+        draw(sf::RenderTarget &target, sf::RenderStates states) const
+    {
         target.draw(m_highlight);
     }
 
@@ -33,23 +36,64 @@ public:
         m_endPos = sf::Vector2f(0, 0);
     }
 
-    void start(const sf::Window &relativeTo) 
+    void setWindow(sf::Window *relativeTo) 
     {
-        m_startPos = (sf::Vector2f)sf::Mouse::getPosition(relativeTo);
-        m_isHighlighted = true;
+        m_window = relativeTo;
     }
 
-    void update(const sf::Window &relativeTo)
+    void toggleHighlight() 
     {
-        m_endPos = (sf::Vector2f)sf::Mouse::getPosition(relativeTo);
-        m_highlight.setSize(m_isHighlighted ? sf::Vector2f(m_startPos.x >= m_endPos.x ? m_startPos.x - m_endPos.x : m_endPos.x - m_startPos.x, m_startPos.y >= m_endPos.y ? m_startPos.y - m_endPos.y : m_endPos.y - m_startPos.y) : sf::Vector2f(0, 0));
-        m_highlight.setPosition(m_isHighlighted ? sf::Vector2f(m_startPos.x >= m_endPos.x ? m_endPos.x : m_startPos.x, m_startPos.y >= m_endPos.y ? m_endPos.y : m_startPos.y) : (sf::Vector2f)sf::Mouse::getPosition(relativeTo));
-        m_highlight.setFillColor(m_isHighlighted ? sf::Color(20, 20, 140, 120) : sf::Color::Transparent);
+        m_isHighlighted = !m_isHighlighted;
     }
 
-    void end() 
+    bool isHighlighted() 
     {
-        m_isHighlighted = false;
+        return m_isHighlighted;
+    }
+
+    // void start(const sf::Window &relativeTo) 
+    // {
+    //     m_startPos = (sf::Vector2f)sf::Mouse::getPosition(relativeTo);
+    // }
+
+    void start() 
+    {
+        m_startPos = (sf::Vector2f)sf::Mouse::getPosition(*m_window);
+    }
+
+    void update()
+    {
+
+        end();
+        if (m_isHighlighted)
+        {
+                        
+            // keeps top left point as position
+            m_highlight.setSize(sf::Vector2f(m_startPos.x >= m_endPos.x ? m_startPos.x - m_endPos.x : m_endPos.x - m_startPos.x, 
+                                             m_startPos.y >= m_endPos.y ? m_startPos.y - m_endPos.y : m_endPos.y - m_startPos.y));
+            m_highlight.setPosition(sf::Vector2f(m_startPos.x >= m_endPos.x ? m_endPos.x : m_startPos.x, 
+                                                 m_startPos.y >= m_endPos.y ? m_endPos.y : m_startPos.y));
+
+            // m_highlight.setSize(m_endPos - m_startPos);
+            // m_highlight.setPosition(m_startPos);
+            
+            m_highlight.setFillColor(sf::Color(20, 20, 140, 120));
+        } 
+        else 
+        {
+            m_highlight.setSize(sf::Vector2f(0, 0));
+            m_highlight.setPosition(0, 0);
+            m_highlight.setFillColor(sf::Color::Transparent);
+        }
+    }
+
+    // void end(const sf::Window &relativeTo)
+    // {
+    //     m_endPos = (sf::Vector2f)sf::Mouse::getPosition(relativeTo);
+    // }
+    void end()
+    {
+        m_endPos = (sf::Vector2f)sf::Mouse::getPosition(*m_window);
     }
 
     const sf::Vector2f &getSize() const
