@@ -166,6 +166,7 @@ public:
             {
                 std::vector<QuadTile::Node *> bRResults = qSearch(_left, _top, _right, _bottom, quad->bRQuad);
                 results.insert(std::end(results), std::begin(bRResults), std::end(bRResults));
+                std::vector<int> inv;
             }
         }
         return results;

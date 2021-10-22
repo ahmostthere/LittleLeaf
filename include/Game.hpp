@@ -15,8 +15,8 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
-#ifndef GAME
-#define GAME
+#ifndef GAME_HPP
+#define GAME_HPP
 
 #pragma once
 #include <SFML/System.hpp>
@@ -40,4 +40,4 @@ private:
     static void load();
 };
 
-#endif // GAME
+#endif // GAME_HPP

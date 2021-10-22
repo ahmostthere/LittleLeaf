@@ -14,26 +14,22 @@ private:
     sf::Vector2f m_endPos;
     sf::Window *m_window;
 
-        virtual void
-        draw(sf::RenderTarget &target, sf::RenderStates states) const
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
         target.draw(m_highlight);
     }
 
 public:
 
-    DragSelect() 
+    DragSelect() : m_isHighlighted(false), m_highlight(sf::Vector2f(0, 0)), m_startPos(sf::Vector2f(0, 0)), m_endPos(sf::Vector2f(0, 0))
     {
-        load();
+        // load
+        m_highlight.setFillColor(sf::Color::Transparent);
     }
 
-    void load() 
+    DragSelect(sf::Window *relativeTo) : m_isHighlighted(false), m_highlight(sf::Vector2f(0, 0)), m_startPos(sf::Vector2f(0, 0)), m_endPos(sf::Vector2f(0, 0)), m_window(relativeTo)
     {
-        m_isHighlighted = false;
-        m_highlight.setSize(sf::Vector2f(0, 0));
         m_highlight.setFillColor(sf::Color::Transparent);
-        m_startPos = sf::Vector2f(0, 0);
-        m_endPos = sf::Vector2f(0, 0);
     }
 
     void setWindow(sf::Window *relativeTo) 
@@ -63,11 +59,11 @@ public:
 
     void update()
     {
+        // end()
+        m_endPos = (sf::Vector2f)sf::Mouse::getPosition(*m_window);
 
-        end();
         if (m_isHighlighted)
         {
-                        
             // keeps top left point as position
             m_highlight.setSize(sf::Vector2f(m_startPos.x >= m_endPos.x ? m_startPos.x - m_endPos.x : m_endPos.x - m_startPos.x, 
                                              m_startPos.y >= m_endPos.y ? m_startPos.y - m_endPos.y : m_endPos.y - m_startPos.y));
@@ -91,10 +87,6 @@ public:
     // {
     //     m_endPos = (sf::Vector2f)sf::Mouse::getPosition(relativeTo);
     // }
-    void end()
-    {
-        m_endPos = (sf::Vector2f)sf::Mouse::getPosition(*m_window);
-    }
 
     const sf::Vector2f &getSize() const
     {

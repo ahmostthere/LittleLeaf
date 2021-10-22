@@ -1,5 +1,5 @@
-#ifndef DEBUG_UTILS
-#define DEBUG_UTILS
+#ifndef DEBUG_UTILS_HPP
+#define DEBUG_UTILS_HPP
 #include <iostream>
 
 void logDebug(std::string message)

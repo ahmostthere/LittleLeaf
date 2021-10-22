@@ -11,6 +11,7 @@
 #include "TileBoard.hpp"
 #include <iostream>
 #include <cmath>
+// #include "Button.hpp"
 
 // #define WIN_WIDTH 480
 // #define WIN_HEIGHT 270
@@ -26,9 +27,14 @@ public:
     static sf::CircleShape t_mouseCircle;
     static sf::RectangleShape t_rotateSquare;
     static sf::RectangleShape t_negativeSquare;
-    
     static DragSelect t_dragSelect;
-    
+
+    static sf::Texture t_ButtonTexture;
+    // static Button upBtn;
+    // static Button downBtn;
+    // static Button leftBtn;
+    // static Button rightBtn;
+
     
     static sf::RenderWindow m_window;
     static bool m_isQuitting;
@@ -46,10 +52,15 @@ sf::CircleShape Testing::t_mouseCircle;
 sf::RectangleShape Testing::t_rotateSquare;
 sf::RectangleShape Testing::t_negativeSquare;
 
-DragSelect Testing::t_dragSelect;
+// sf::Texture Testing::t_ButtonTexture;
+// Button Testing::upBtn;
+// Button Testing::downBtn;
+// Button Testing::leftBtn;
+// Button Testing::rightBtn;
 
 sf::RenderWindow Testing::m_window;
 bool Testing::m_isQuitting;
+DragSelect Testing::t_dragSelect(&m_window);
 
 void Testing::load()
 {
@@ -71,7 +82,34 @@ void Testing::load()
     t_negativeSquare.setOrigin(t_negativeSquare.getSize().x / 2, t_negativeSquare.getSize().y / 2);
     t_negativeSquare.setSize(sf::Vector2f(120, -120));
 
-    t_dragSelect.setWindow(&m_window);
+    // Button Testing
+    // t_ButtonTexture.loadFromFile("assets/arrowButtons.png");
+    // upBtn = Button(
+    //     t_ButtonTexture, 
+    //     sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(100, 100)), 
+    //     sf::IntRect(sf::Vector2i(400, 0), sf::Vector2i(100, 100)), 
+    //     sf::IntRect(sf::Vector2i(400, 0), sf::Vector2i(100, 100)));
+    // upBtn.setPosition(400, 300);
+    // downBtn = Button(
+    //     t_ButtonTexture, 
+    //     sf::IntRect(sf::Vector2i(100, 0), sf::Vector2i(100, 100)), 
+    //     sf::IntRect(sf::Vector2i(500, 0), sf::Vector2i(100, 100)), 
+    //     sf::IntRect(sf::Vector2i(500, 0), sf::Vector2i(100, 100)));
+    // downBtn.setPosition(400, 450);
+    // leftBtn = Button(
+    //     t_ButtonTexture, 
+    //     sf::IntRect(sf::Vector2i(200, 0), sf::Vector2i(100, 100)), 
+    //     sf::IntRect(sf::Vector2i(600, 0), sf::Vector2i(100, 100)), 
+    //     sf::IntRect(sf::Vector2i(600, 0), sf::Vector2i(100, 100)));
+    // leftBtn.setPosition(250, 450);
+    // rightBtn = Button(
+    //     t_ButtonTexture, 
+    //     sf::IntRect(sf::Vector2i(300, 0), sf::Vector2i(100, 100)), 
+    //     sf::IntRect(sf::Vector2i(700, 0), sf::Vector2i(100, 100)), 
+    //     sf::IntRect(sf::Vector2i(700, 0), sf::Vector2i(100, 100)));
+    // rightBtn.setPosition(550, 450);
+
+    // t_dragSelect.setWindow(&m_window);
 
     m_isQuitting = false;
 
@@ -79,7 +117,6 @@ void Testing::load()
         sf::VideoMode(WIN_WIDTH, WIN_HEIGHT), "TEST",
         sf::Style::Close);
     m_window.setFramerateLimit(60);
-
 }
 
 void Testing::handleInput()
@@ -101,7 +138,27 @@ void Testing::handleInput()
                         m_isQuitting = true;
                         break;
 
+                    case sf::Keyboard::Left:
+                        // std::cout << "left Pressed" << std::endl;
+                        // leftBtn.setButtonState(Button::SELECTED);
+                        break;
+
+                    case sf::Keyboard::Right:
+                        // std::cout << "right Pressed" << std::endl;
+                        // rightBtn.setButtonState(Button::SELECTED);
+                        break;
+
+                    case sf::Keyboard::Down:
+                        // std::cout << "down Pressed" << std::endl;
+                        // downBtn.setButtonState(Button::SELECTED);
+                        break;
+
                     case sf::Keyboard::Up:
+                        // upBtn.setButtonState(Button::SELECTED);
+                        // std::cout << "up Pressed" << std::endl;
+                        break;
+
+                    case sf::Keyboard::R:
                         t_rotateSquare.setRotation(t_rotateSquare.getRotation() + 1);
                         break;
 
@@ -119,16 +176,13 @@ void Testing::handleInput()
 
                     case sf::Keyboard::P:
                         // t_GameBoardQuad->printQuads();
+                        break;
 
                     case sf::Keyboard::S:
-                    {
                         break;
-                    }
 
                     case sf::Keyboard::D:
-                    {
                         break;
-                    }
 
                     default:
                         break;
@@ -155,7 +209,8 @@ void Testing::handleInput()
             {
                 if (t_dragSelect.isHighlighted())
                     t_dragSelect.toggleHighlight();
-                
+
+                std::cout << "mouse released" << std::endl;
 
                 // std::vector<Quad<Tile *>::Node *> them;    
                 // them = qSearch(t_dragSelect.getPosition().x,
@@ -172,6 +227,28 @@ void Testing::handleInput()
                 // }
                 break;
             }
+
+            case sf::Event::KeyReleased:
+                switch (curEvent.key.code)
+                {
+                    case sf::Keyboard::Up:
+                        // upBtn.setButtonState(Button::UNSELECTED);
+                        // std::cout << "up Released" << std::endl;
+                        break;
+                    case sf::Keyboard::Left:
+                        // leftBtn.setButtonState(Button::UNSELECTED);
+                        // std::cout << "left Released" << std::endl;
+                        break;
+                    case sf::Keyboard::Right:
+                        // rightBtn.setButtonState(Button::UNSELECTED);
+                        // std::cout << "right Released" << std::endl;
+                        break;
+                    case sf::Keyboard::Down:
+                        // downBtn.setButtonState(Button::UNSELECTED);
+                        // std::cout << "down Released" << std::endl;
+                        break;
+                }
+                break;
 
             default:
                 break;
@@ -202,6 +279,10 @@ void Testing::render()
     m_window.draw(t_negativeSquare);
     m_window.draw(t_mouseCircle);
     m_window.draw(t_dragSelect);
+    // m_window.draw(upBtn);
+    // m_window.draw(downBtn);
+    // m_window.draw(leftBtn);
+    // m_window.draw(rightBtn);
 
     m_window.display();
 }

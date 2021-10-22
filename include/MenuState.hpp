@@ -15,8 +15,8 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
-#ifndef MENU_STATE
-#define MENU_STATE
+#ifndef MENU_STATE_HPP
+#define MENU_STATE_HPP
 
 #include "GameState.hpp"
 
@@ -42,8 +42,8 @@ private:
     sf::Texture playTexture;
     sf::Texture quitTexture;
     sf::Sprite menuSplash;
-    sf::Sprite playSprite;
-    sf::Sprite quitSprite;
+    Button playButton;
+    Button quitButton;
     bool play;
 };
 

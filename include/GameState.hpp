@@ -15,12 +15,13 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
-#ifndef GAME_STATE
-#define GAME_STATE
+#ifndef GAME_STATE_HPP
+#define GAME_STATE_HPP
 
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include "Button.hpp"
 
 class GameState
 {

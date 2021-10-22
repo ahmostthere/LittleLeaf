@@ -20,7 +20,6 @@ DESCRIPTION
 
 void Game::start()
 {
-
     load();
     while (!GameStateManager::empty() && !GameStateManager::currentGameState()->quit)
     {

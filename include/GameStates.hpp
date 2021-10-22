@@ -15,8 +15,8 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
-#ifndef GAME_STATES
-#define GAME_STATES
+#ifndef GAME_STATES_HPP
+#define GAME_STATES_HPP
 
 #include "GameState.hpp"
 #include "MenuState.hpp"

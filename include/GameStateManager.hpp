@@ -15,8 +15,8 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 Game State Manager uses stack of Game States
 */
-#ifndef GAME_STATE_MANAGER
-#define GAME_STATE_MANAGER
+#ifndef GAME_STATE_MANAGER_HPP
+#define GAME_STATE_MANAGER_HPP
 
 #pragma once
 #include "NodeStack.hpp"
