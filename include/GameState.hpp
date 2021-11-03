@@ -43,13 +43,14 @@ public:
     virtual void update() = 0;
     virtual void render() = 0;
 
+    void close();
     void resetTimer();
 
     static bool quit;
     static State nextState;
-    static sf::RenderWindow m_Window;
-    static sf::Clock m_Clock;
-    static sf::Time m_Time;
+    static sf::RenderWindow m_window;
+    static sf::Clock m_clock;
+    static sf::Time m_time;
 
     // friend std::ostream &operator<<(std::ostream &os, const GameState &_gs) {
     //     os << _gs.name;

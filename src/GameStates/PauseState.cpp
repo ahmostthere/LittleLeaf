@@ -24,33 +24,33 @@ GameState::State PauseState::getState() { return Pause; }
 void PauseState::onEnter()
 {
     nextState = Pause;
-    m_Window.create(sf::VideoMode(1080, 720), "Pause");
+    m_window.create(sf::VideoMode(1080, 720), "Pause");
     std::cout << "Enter Pause State" << std::endl;
 }
 
 void PauseState::onExit()
 {
-    m_Window.close();
+    m_window.close();
     std::cout << "Exit Pause State" << std::endl;
 }
 
 void PauseState::onReveal()
 {
     nextState = Pause;
-    m_Window.create(sf::VideoMode(1080, 720), "Pause");
+    m_window.create(sf::VideoMode(1080, 720), "Pause");
     std::cout << "Reveal Pause State" << std::endl;
 }
 
 void PauseState::onConseal()
 {
-    m_Window.close();
+    m_window.close();
     std::cout << "Conseal Pause State" << std::endl;
 }
 
 void PauseState::handleInputs()
 {
     sf::Event currentEvent;
-    while (m_Window.pollEvent(currentEvent))
+    while (m_window.pollEvent(currentEvent))
     {
         switch (currentEvent.type)
         {
@@ -85,7 +85,7 @@ void PauseState::update()
 
 void PauseState::render()
 {
-    m_Window.clear();
+    m_window.clear();
 
-    m_Window.display();
+    m_window.display();
 }

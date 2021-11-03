@@ -20,6 +20,7 @@ DESCRIPTION
 
 #include "GameState.hpp"
 #include "Player.hpp"
+#include "DragSelect.hpp"
 
 #define PLAY_WIN_WIDTH 1920
 #define PLAY_WIN_HEIGHT 1080
@@ -37,6 +38,7 @@ public:
     void render();
     State getState();
     Player m_player;
+    DragSelect m_dragSelect;
 };
 
 #endif //PLAY_STATE

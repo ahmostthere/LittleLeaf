@@ -15,3 +15,11 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
+#ifndef KEY_BINDINGS_HPP
+#define KEY_BINDINGS_HPP
+
+#include <iostream>
+#include <SFML/Graphics.hpp>
+
+
+#endif // KEY_BINDINGS_HPP

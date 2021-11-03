@@ -14,9 +14,9 @@ public:
         SELECTED
     };
     Button();
-    Button(const sf::Texture &texture);
-    Button(const sf::Texture &texture, const sf::IntRect &unselectedRect);
-    Button(const sf::Texture &texture, const sf::IntRect &unselectedRect, const sf::IntRect &selectedRect, const sf::IntRect &hoverRect);
+    Button(const sf::Texture &texture, Button::ButtonState _buttonState = UNSELECTED);
+    Button(const sf::Texture &texture, const sf::IntRect &unselectedRect, Button::ButtonState _buttonState = UNSELECTED);
+    Button(const sf::Texture &texture, const sf::IntRect &unselectedRect, const sf::IntRect &selectedRect, const sf::IntRect &hoverRect, Button::ButtonState _buttonState = UNSELECTED);
     void setButtonState(ButtonState btnState);
     void setPosition(float x, float y);
     void setPosition(const sf::Vector2f& position);
