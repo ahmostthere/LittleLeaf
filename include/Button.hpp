@@ -1,3 +1,26 @@
+/*
+FILE
+-----------------------------------------------------------------------------------------------
+Button.hpp
+
+AUTHOR
+-----------------------------------------------------------------------------------------------
+Thomas Tang
+
+DATE
+-----------------------------------------------------------------------------------------------
+2021-11-02
+
+DESCRIPTION
+-----------------------------------------------------------------------------------------------
+Button is for user interface buttons.
+Each button has 3 states: Unselected, Hover, Selected.
+Unselected is default state of each button.
+Hover is state when mouse is moved over button. Can be visibly the same as Selected.
+Selected is state when button is pressed or in focus. A button is in focus when it is tabbed or selected through with keyboard buttons.
+Only a single button can be in focus.
+
+*/
 #ifndef BUTTON_HPP
 #define BUTTON_HPP
 
