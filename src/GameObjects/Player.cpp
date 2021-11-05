@@ -7,11 +7,7 @@
 Player::Player() : m_speed(DEFAULT_SPEED), m_player(sf::CircleShape(50)), m_direction(0b0000), isMoving(false)
 {
     m_player.setFillColor(sf::Color::Blue);
-    
-    m_mouseMove.setRadius(10);
-    m_mouseMove.setFillColor(sf::Color::Red);
-    m_mouseMove.setOrigin(m_mouseMove.getRadius(), m_mouseMove.getRadius());
-    m_mouseMove.setPosition(m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius()));
+    m_mouseMovePosition = m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius());
 }
 
 Player::Player(const sf::Vector2f &_position) : m_speed(DEFAULT_SPEED), m_player(sf::CircleShape(50)), m_direction(0b0000), isMoving(false)
@@ -19,11 +15,7 @@ Player::Player(const sf::Vector2f &_position) : m_speed(DEFAULT_SPEED), m_player
     m_player.setFillColor(sf::Color::Blue);
     m_player.setPosition(_position);
     setPosition(_position);
-
-    m_mouseMove.setRadius(10);
-    m_mouseMove.setFillColor(sf::Color::Red);
-    m_mouseMove.setOrigin(m_mouseMove.getRadius(), m_mouseMove.getRadius());
-    m_mouseMove.setPosition(m_player.getPosition() + m_player.getOrigin());
+    m_mouseMovePosition = m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius());
 }
 
 Player::~Player()
@@ -156,27 +148,27 @@ void Player::handleButtonMove(sf::Time _time)
     if (isMoving) 
     {
         m_player.move(std::cos(theta) * m_speed * _time.asSeconds(), std::sin(theta) * m_speed * _time.asSeconds());
-        m_mouseMove.setPosition(m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius()));
+        m_mouseMovePosition = m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius());
     }
 }
 
 void Player::handleMouseMove(sf::Time _time)
 {
-    sf::Vector2f posDif = m_mouseMove.getPosition() - (m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius()));
+    sf::Vector2f posDif = m_mouseMovePosition - (m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius()));
     float theta = std::atan2(posDif.y, posDif.x);
     float distance = sqrt((posDif.x * posDif.x) + (posDif.y * posDif.y));
-    if (distance > 3)
+    if (distance > 2)
         m_player.move(std::cos(theta) * m_speed * _time.asSeconds(), std::sin(theta) * m_speed * _time.asSeconds());
     else
-        m_mouseMove.setPosition(m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius()));
+        m_mouseMovePosition = m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius());
 }
 
 void Player::setMouseMovePosition(const sf::Vector2i &_mousePosition)
 {
-    m_mouseMove.setPosition(_mousePosition.x, _mousePosition.y);
+    m_mouseMovePosition = sf::Vector2f(_mousePosition.x, _mousePosition.y);
 }
 
 void Player::resetMouseMovePosition()
 {
-    m_mouseMove.setPosition(m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius()));
+    m_mouseMovePosition = m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius());
 }

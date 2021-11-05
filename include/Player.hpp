@@ -8,7 +8,8 @@ class Player : public Character
 public:
     int m_speed;
     sf::CircleShape m_player;
-    sf::CircleShape m_mouseMove;
+    // sf::CircleShape m_mouseMove;
+    sf::Vector2f m_mouseMovePosition;
     sf::Uint8 m_direction;
     float m_theta;
 
@@ -37,7 +38,7 @@ private:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
         target.draw(m_player, states);
-        target.draw(m_mouseMove, states);
+        // target.draw(m_mouseMove, states);
     }
 };
 

@@ -72,9 +72,6 @@ public:
             setPosition(sf::Vector2f(m_startPos.x >= m_endPos.x ? m_endPos.x : m_startPos.x, 
                                                  m_startPos.y >= m_endPos.y ? m_endPos.y : m_startPos.y));
 
-            // m_highlight.setSize(m_endPos - m_startPos);
-            // m_highlight.setPosition(m_startPos);
-            
             setFillColor(sf::Color(20, 20, 140, 120));
         } 
         else 
