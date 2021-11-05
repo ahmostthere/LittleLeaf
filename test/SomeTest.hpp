@@ -143,9 +143,21 @@ void Testing::handleInput()
 
             case sf::Event::MouseButtonReleased:
             {
+                // select tiles that are highlighted
+                if (t_dragSelect.isHighlighted())
+                {
+                    std::vector<Tile *> found = t_gameBoard->search(t_dragSelect.getGlobalBounds());
+                    for (int i = 0; i < found.size(); i++)
+                    {
+                        found[i]->select();
+                    }
+                }
+
+                // turn off dragselect highlight
                 t_dragSelect.onReleased();
+
                 // t_mouseCircle.setPosition((sf::Vector2f)sf::Mouse::getPosition(m_window));
-                
+
                 // std::vector<Quad<Tile *>::Node *> them;    
                 // them = qSearch(t_dragSelect.getPosition().x,
                 //                 t_dragSelect.getPosition().y,
@@ -176,14 +188,10 @@ void Testing::handleInput()
 void Testing::update()
 {
     //  Update stuff
-    if (t_dragSelect.isHighlighted()) {
-        std::vector<Tile *> found = t_gameBoard->search(t_dragSelect.getGlobalBounds());
-        for (int i = 0; i < found.size(); i++)
-        {
-            found[i]->select();
-        }
-    }
     t_dragSelect.update();
+
+    // combination of mouse hover and highlight hover
+    t_gameBoard->generalHover(sf::Mouse::getPosition(m_window),t_dragSelect.getGlobalBounds());
 }
 
 void Testing::render()

@@ -7,81 +7,78 @@
 #include <vector>
 
 template <typename T>
+class Node
+{
+private:
+    T m_data;
+
+public:
+    float x;
+    float y;
+
+    Node()
+    {
+        x = 0;
+        y = 0;
+    }
+
+    Node(const T &_data)
+    {
+        m_data = _data;
+        x = 0;
+        y = 0;
+    }
+
+    Node(const T &_data, float _x, float _y)
+    {
+        m_data = _data;
+        x = _x;
+        y = _y;
+    }
+
+    Node(const T &_data, sf::Vector2f _pos)
+    {
+        m_data = _data;
+        x = _pos.x;
+        y = _pos.y;
+    }
+
+    Node(float _x, float _y)
+    {
+        x = _x;
+        y = _y;
+    }
+
+    Node(sf::Vector2f _pos)
+    {
+        x = _pos.x;
+        y = _pos.y;
+    }
+
+    ~Node()
+    {
+    }
+
+    void data(const T &_data)
+    {
+        m_data = _data;
+    }
+
+    T &data()
+    {
+        return m_data;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Node &_qNode)
+    {
+        os << "[" << _qNode.x << ", " << _qNode.y << "]\n";
+        return os;
+    }
+};
+
+template <typename T>
 class Quad 
 {
-public: 
-    class Node 
-    {
-    private:
-        
-        T m_data;
-
-    public:
-
-        float x;
-        float y;
-
-
-        Node()
-        {
-            x = 0;
-            y = 0;
-        }
-
-        Node(const T& _data) 
-        {
-            m_data = _data;
-            x = 0;
-            y = 0;
-        }
-        
-        Node(const T& _data, float _x, float _y) 
-        {
-            m_data = _data;
-            x = _x;
-            y = _y;
-        }
-        
-        Node(const T& _data, sf::Vector2f _pos) 
-        {
-            m_data = _data;
-            x = _pos.x;
-            y = _pos.y;
-        }
-
-        Node(float _x, float _y) 
-        {
-            x = _x;
-            y = _y;
-        }
-
-        Node(sf::Vector2f _pos) 
-        {
-            x = _pos.x;
-            y = _pos.y;
-        }
-
-        ~Node() 
-        {
-        }
-
-        void data(const T& _data) 
-        {
-            m_data = _data;
-        }
-
-        T& data()
-        {   
-            return m_data;
-        }
-
-        friend std::ostream &operator<<(std::ostream &os, const Node &_qNode)
-        {
-            os << "[" << _qNode.x << ", " << _qNode.y << "]\n";
-            return os;
-        }
-    };
-
 public:
     
     float left;
@@ -89,7 +86,7 @@ public:
     float right;
     float bottom;
     
-    Node *node;
+    Node<T> *node;
     Quad *tLQuad, *tRQuad, *bLQuad, *bRQuad;
 
     std::string getTabs(int count)
@@ -233,7 +230,7 @@ public:
                 bottom >= _y);
     }
 
-    void insert(Node *_node)
+    void insert(Node<T> *_node)
     {
         if (_node == nullptr)
         {
@@ -307,21 +304,9 @@ public:
         }
     }
 
-    // std::vector<T> search(sf::FloatRect _rect)
-    // {
-        
-    // }
-    
-    // std::vector<T> search(sf::Vector2f topLeft, sf::Vector2f botRight)
-    // {
-
-    // }
-
-    friend std::vector<Node *> qSearch(float _left, float _top, float _right, float _bottom, Quad *quad);
-    
-    std::vector<Node *> search(float _left, float _top, float _right, float _bottom)
-    {   
-        std::vector<Node*> results;
+    std::vector<Node<T> *> search(float _left, float _top, float _right, float _bottom)
+    {
+        std::vector<Node<T> *> results;
         if (_bottom < _top) 
         {
             float t = _bottom;
@@ -358,22 +343,22 @@ public:
         {
             if (tLQuad != nullptr)
             {
-                std::vector<Node*> tLResults = tLQuad->search(_left, _top, _right, _bottom);
+                std::vector<Node<T> *> tLResults = tLQuad->search(_left, _top, _right, _bottom);
                 results.insert(std::end(results), std::begin(tLResults), std::end(tLResults));
             }
             if (tRQuad != nullptr)
             {
-                std::vector<Node*> tRResults = tRQuad->search(_left, _top, _right, _bottom);
+                std::vector<Node<T> *> tRResults = tRQuad->search(_left, _top, _right, _bottom);
                 results.insert(std::end(results), std::begin(tRResults), std::end(tRResults));
             }
             if (bLQuad != nullptr)
             {
-                std::vector<Node*> bLResults = bLQuad->search(_left, _top, _right, _bottom);
+                std::vector<Node<T> *> bLResults = bLQuad->search(_left, _top, _right, _bottom);
                 results.insert(std::end(results), std::begin(bLResults), std::end(bLResults));
             }
             if (bRQuad != nullptr)
             {
-                std::vector<Node*> bRResults = bRQuad->search(_left, _top, _right, _bottom);
+                std::vector<Node<T> *> bRResults = bRQuad->search(_left, _top, _right, _bottom);
                 results.insert(std::end(results), std::begin(bRResults), std::end(bRResults));
             }
         }
@@ -388,22 +373,22 @@ public:
             }
             if (tLQuad != nullptr)
             {
-                std::vector<Node*> tLResults = tLQuad->search(_left, _top, _right, _bottom);
+                std::vector<Node<T> *> tLResults = tLQuad->search(_left, _top, _right, _bottom);
                 results.insert(std::end(results), std::begin(tLResults), std::end(tLResults));
             }
             if (tRQuad != nullptr)
             {
-                std::vector<Node*> tRResults = tRQuad->search(_left, _top, _right, _bottom);
+                std::vector<Node<T> *> tRResults = tRQuad->search(_left, _top, _right, _bottom);
                 results.insert(std::end(results), std::begin(tRResults), std::end(tRResults));
             }
             if (bLQuad != nullptr)
             {
-                std::vector<Node*> bLResults = bLQuad->search(_left, _top, _right, _bottom);
+                std::vector<Node<T> *> bLResults = bLQuad->search(_left, _top, _right, _bottom);
                 results.insert(std::end(results), std::begin(bLResults), std::end(bLResults));
             }
             if (bRQuad != nullptr)
             {
-                std::vector<Node*> bRResults = bRQuad->search(_left, _top, _right, _bottom);
+                std::vector<Node<T> *> bRResults = bRQuad->search(_left, _top, _right, _bottom);
                 results.insert(std::end(results), std::begin(bRResults), std::end(bRResults));
             }
         }

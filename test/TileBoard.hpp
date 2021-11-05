@@ -222,6 +222,39 @@ public:
             }
         }
     }
+
+    void hover(const sf::Vector2i &mousePos)
+    {
+        for (int j = 0; j < row; j++)
+        {
+            for (int i = 0; i < col; i++)
+            {
+                m_tileboard[i][j].hover(mousePos);
+            }
+        }
+    }
+
+    void areaHover(const sf::FloatRect &rectangle)
+    {
+        for (int j = 0; j < row; j++)
+        {
+            for (int i = 0; i < col; i++)
+            {
+                m_tileboard[i][j].areaHover(rectangle);
+            }
+        }
+    }
+
+    void generalHover(const sf::Vector2i &mousePos, const sf::FloatRect &rectangle)
+    {
+        for (int j = 0; j < row; j++)
+        {
+            for (int i = 0; i < col; i++)
+            {
+                m_tileboard[i][j].generalHover(mousePos, rectangle);
+            }
+        }
+    }
 };
 
 #endif

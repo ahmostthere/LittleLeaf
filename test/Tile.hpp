@@ -40,6 +40,33 @@ public:
         return m_index;
     }
 
+    void hover(const sf::Vector2i& mousePos)
+    {
+        contains((sf::Vector2f)mousePos) ?
+            setFillColor(sf::Color(255, 255, 0, 180)) :
+            m_isSelected?
+                setFillColor(sf::Color(0, 255, 255, 180)) :
+                setFillColor(sf::Color::White);
+    }
+
+    void areaHover(const sf::FloatRect &rectangle)
+    {
+        intersects(rectangle) ? 
+            setFillColor(sf::Color(255, 255, 0, 180)) : 
+            m_isSelected ? 
+                setFillColor(sf::Color(0, 255, 255, 180)) : 
+                setFillColor(sf::Color::White);
+    }
+
+    void generalHover(const sf::Vector2i &mousePos, const sf::FloatRect &rectangle)
+    {
+        (contains((sf::Vector2f)mousePos) || intersects(rectangle)) ?
+            setFillColor(sf::Color(255, 255, 0, 180)) :
+            m_isSelected ? 
+                setFillColor(sf::Color(0, 255, 255, 180)) : 
+                setFillColor(sf::Color::White);
+    }
+    
     void select()
     {
         setFillColor(sf::Color(0, 255, 255, 180));
