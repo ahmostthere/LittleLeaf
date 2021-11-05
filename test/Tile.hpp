@@ -3,32 +3,31 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
-class Tile : public sf::Drawable
+// class Tile : public sf::Drawable
+class Tile : public sf::RectangleShape
 {
 private:
     sf::Vector2i m_index;
-    sf::RectangleShape m_tile;
-    sf::RectangleShape m_highlight;
     bool m_isSelected;
-    // sf::Sprite m_sprite;
 
-    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const
+    friend std::ostream &operator<<(std::ostream &os, const Tile &_tile)
     {
-        target.draw(m_tile);
-        target.draw(m_highlight);
+        os << "(" << _tile.m_index.x << ", " << _tile.m_index.y << ")";
+        return os;
     }
 
 public:
     explicit Tile(const sf::Vector2f &size = sf::Vector2f(0, 0))
     {
-        setSize(size);
+        setIndex(sf::Vector2i(0,0));
         m_isSelected = false;
-        m_tile.setFillColor(sf::Color::White);
-        m_tile.setOutlineColor(sf::Color::Black);
-        m_tile.setOutlineThickness(1);
 
-        m_highlight.setFillColor(sf::Color::Transparent);
+        setSize(size);
+        setFillColor(sf::Color::White);
+        setOutlineColor(sf::Color::Black);
+        setOutlineThickness(1);
     }
 
     void setIndex(const sf::Vector2i &index)
@@ -43,66 +42,33 @@ public:
 
     void select()
     {
+        setFillColor(sf::Color(0, 255, 255, 180));
         m_isSelected = true;
     }
 
     void deselect()
     {
+        setFillColor(sf::Color::White);
         m_isSelected = false;
     }
 
-    bool isSelected() {
+    bool isSelected() 
+    {
         return m_isSelected;
     }
 
     void update()
     {
-        m_highlight.setFillColor(m_isSelected ? sf::Color(0, 200, 200) : sf::Color::Transparent);
-    }
-
-    void setPosition(const sf::Vector2f &position)
-    {
-        m_tile.setPosition(position);
-        m_highlight.setPosition(position);
-    }
-
-    void setPosition(float x, float y)
-    {
-        m_tile.setPosition(x, y);
-        m_highlight.setPosition(x, y);
-    }
-
-    const sf::Vector2f &getPosition() const
-    {
-        return m_tile.getPosition();
-    }
-
-    void setOrigin(float x, float y)
-    {
-        m_tile.setOrigin(x, y);
-        m_highlight.setOrigin(x, y);
-    }
-
-    void setOrigin(const sf::Vector2f &origin)
-    {
-        m_tile.setOrigin(origin);
-        m_highlight.setOrigin(origin);
-    }
-
-    void setSize(const sf::Vector2f &size)
-    {
-        m_tile.setSize(size);
-        m_highlight.setSize(size);
     }
 
     bool contains(const sf::Vector2f &point)
     {
-        return m_tile.getLocalBounds().contains(point);
+        return getGlobalBounds().contains(point);
     }
 
     bool intersects(const sf::FloatRect &rectangle)
     {
-        return m_tile.getLocalBounds().intersects(rectangle);
+        return getGlobalBounds().intersects(rectangle);
     }
 };
 

@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics/Drawable.hpp>
 #include "Tile.hpp"
-#include "Quad.hpp"
+// #include "Quad.hpp"
 #include <iostream>
 /*  
     _Tileboard A_
@@ -20,7 +20,7 @@
     Tile (0, 1) => A[0][1]
 */
 
-typedef Quad<Tile *> QuadTile;
+// typedef Quad<Tile *> QuadTile;
 
 class TileBoard : public sf::Drawable 
 {
@@ -31,7 +31,7 @@ private:
     bool centered;
 
     Tile** m_tileboard;
-    QuadTile *m_tileboardQuad;
+    // QuadTile *m_tileboardQuad;
     
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
@@ -44,30 +44,24 @@ private:
         }
     }
 
-    
-
 public:
-    TileBoard(int _col, int _row, int _tilesize, bool _centered = false) 
+    TileBoard(int _col, int _row, int _tilesize, bool _centered = false) : row(_row), col(_col), tilesize(_tilesize), centered(_centered), m_tileboard(new Tile *[_col])
+    // , m_tileboardQuad(new Quad<Tile *>(sf::FloatRect(sf::Vector2f(0,0), sf::Vector2f(_col * _tilesize, _row * _tilesize))))
     {
-        row = _row;
-        col = _col;
-        tilesize = _tilesize;
-        centered = _centered;
-        m_tileboard = new Tile*[_col];
-        sf::Vector2f tL(0,0);
-        m_tileboardQuad = new Quad<Tile *>(sf::FloatRect(tL, sf::Vector2f(_col * tilesize, _row * tilesize)));
         for (int i = 0; i < col; i++) 
         {
             m_tileboard[i] = new Tile[_row];
         }
 
-        for (int i = 0; i < col; i++) 
+        for (int j = 0; j < row; j++)
         {
-            for (int j = 0; j < row; j++)
+            for (int i = 0; i < col; i++) 
             {
-                m_tileboard[i][j].setSize(sf::Vector2f(_tilesize, _tilesize));
-                m_tileboard[i][j].setPosition(i * _tilesize + tL.x, j * _tilesize + tL.y);
-                m_tileboardQuad->insert(new Quad<Tile *>::Node(&m_tileboard[i][j], m_tileboard[i][j].getPosition()));
+                m_tileboard[i][j].setSize(sf::Vector2f(tilesize, tilesize));
+                m_tileboard[i][j].setPosition(i * tilesize, j * tilesize);
+                m_tileboard[i][j].setIndex(sf::Vector2i(i, j));
+                std::cout << m_tileboard[i][j] << std::endl;
+                // m_tileboardQuad->insert(new Quad<Tile *>::Node(&m_tileboard[i][j], m_tileboard[i][j].getPosition()));
             }
         }
     }
@@ -77,10 +71,41 @@ public:
         for (int i = 0; i < col; i++)
             delete[] m_tileboard[i];
         delete[] m_tileboard;
-        delete m_tileboardQuad;
+        // delete m_tileboardQuad;
     }
 
-    
+    Tile *searchPoint(const sf::Vector2f &point) 
+    {
+        for (int j = 0; j < row; j++)
+        {
+            for (int i = 0; i < col; i++)
+            {
+                if (m_tileboard[i][j].contains(point))
+                {
+                    return &m_tileboard[i][j];
+                }
+            }
+        }
+        return nullptr;
+    }
+
+    std::vector<Tile *>search(const sf::FloatRect &rect) 
+    {
+        std::vector<Tile *> results;
+
+        for (int j = 0; j < row; j++)
+        {
+            for (int i = 0; i < col; i++)
+            {
+                if (m_tileboard[i][j].intersects(rect))
+                {
+                    results.push_back(&m_tileboard[i][j]);
+                }
+            }
+        }
+        return results;
+    }
+    /* qSearch
     std::vector<QuadTile::Node *> qSearch(float _left, float _top, float _right, float _bottom, QuadTile *quad)
     {
         std::vector<QuadTile::Node *> results;
@@ -171,14 +196,27 @@ public:
         }
         return results;
     }
+    */
 
+    void changeColors()
+    {
+        for (int j = 0; j < row; j++)
+        {
+            for (int i = 0; i < col; i++)
+            {
+                float co = (j * row + j + i) * 255 / (row + col);
 
+                std::cout << co << std::endl;
+                m_tileboard[i][j].setFillColor(sf::Color(co, co, co));
+            }
+        }
+    }
 
     void update()
     {
-        for (int i = 0; i < col; i++)
+        for (int j = 0; j < row; j++)
         {
-            for (int j = 0; j < row; j++)
+            for (int i = 0; i < col; i++)
             {
                 m_tileboard[i][j].update();
             }

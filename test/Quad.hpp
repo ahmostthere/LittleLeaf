@@ -10,8 +10,6 @@ template <typename T>
 class Quad 
 {
 public: 
-
-    
     class Node 
     {
     private:
