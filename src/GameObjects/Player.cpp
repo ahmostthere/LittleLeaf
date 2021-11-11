@@ -147,7 +147,9 @@ void Player::handleButtonMove(sf::Time _time)
 
     if (isMoving) 
     {
-        m_player.move(std::cos(theta) * m_speed * _time.asSeconds(), std::sin(theta) * m_speed * _time.asSeconds());
+        sf::Vector2f direction(std::cos(theta), std::sin(theta));
+        float velocity = m_speed * _time.asSeconds();
+        m_player.move(direction.x * velocity, direction.y * velocity);
         m_mouseMovePosition = m_player.getPosition() + sf::Vector2f(m_player.getRadius(), m_player.getRadius());
     }
 }

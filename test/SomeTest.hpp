@@ -7,6 +7,7 @@
 #include <SFML/Window.hpp>
 #include "Quad.hpp"
 #include "DragSelect.hpp"
+#include "Draggable.hpp"
 #include "Tile.hpp"
 #include "TileBoard.hpp"
 #include <iostream>
@@ -27,8 +28,13 @@ public:
     static sf::RectangleShape t_rotateSquare;
     static sf::RectangleShape t_negativeSquare;
     static DragSelect t_dragSelect;
+    static Draggable t_drag;
+    static sf::CircleShape t_player;
     
     static sf::RenderWindow m_window;
+    static sf::Time m_time;
+    static sf::Clock m_clock;
+    static sf::View m_view;
     static bool m_isQuitting;
     static void load();
 
@@ -37,14 +43,21 @@ public:
     static void render();
     static bool quitting();
     static void quit();
+    static void resetTimer();
+    static void t_move(sf::Keyboard::Key _up, sf::Keyboard::Key _down, sf::Keyboard::Key _left, sf::Keyboard::Key _right, sf::Transformable movable);
 };
 
 TileBoard *Testing::t_gameBoard;
 sf::CircleShape Testing::t_mouseCircle;
+sf::CircleShape Testing::t_player(30);
 
 sf::RenderWindow Testing::m_window;
+sf::Time Testing::m_time;
+sf::Clock Testing::m_clock;
+sf::View Testing::m_view;
 bool Testing::m_isQuitting;
 DragSelect Testing::t_dragSelect(&m_window);
+Draggable Testing::t_drag(sf::Vector2f(80, 80));
 
 void Testing::load()
 {
@@ -56,12 +69,22 @@ void Testing::load()
     t_mouseCircle.setFillColor(sf::Color(220, 0, 0, 55));
     t_mouseCircle.setOrigin(sf::Vector2f(t_mouseCircle.getRadius(), t_mouseCircle.getRadius()));
 
+
+    t_player.setFillColor(sf::Color(0, 255, 255));
+    t_player.setPosition(WIN_WIDTH/2, WIN_HEIGHT/2);
+
+    t_drag.setPosition(200, 200);
+
     m_isQuitting = false;
 
+    m_view.setCenter(sf::Vector2f(WIN_WIDTH/2, WIN_HEIGHT/2));
+    m_view.setSize(WIN_WIDTH, WIN_HEIGHT);
     m_window.create(
         sf::VideoMode(WIN_WIDTH, WIN_HEIGHT), "TEST",
         sf::Style::Close);
     m_window.setFramerateLimit(60);
+    m_window.setView(m_view);
+    
 }
 
 void Testing::handleInput()
@@ -75,58 +98,8 @@ void Testing::handleInput()
                 m_isQuitting = true;
                 break;
 
-            case sf::Event::KeyPressed:
-            {
-                switch (curEvent.key.code)
-                {
-                    case sf::Keyboard::Escape:
-                        m_isQuitting = true;
-                        break;
-
-                    case sf::Keyboard::Left:
-                        break;
-
-                    case sf::Keyboard::Right:
-                        break;
-
-                    case sf::Keyboard::Down:
-                        break;
-
-                    case sf::Keyboard::Up:
-                        break;
-
-                    case sf::Keyboard::R:
-                        break;
-
-                    case sf::Keyboard::L:
-                        break;
-
-                    case sf::Keyboard::O:
-                        break;
-
-                    case sf::Keyboard::P:
-                        // t_gameBoard->printQuads();
-                        break;
-
-                    case sf::Keyboard::S:
-                        t_gameBoard->changeColors();
-                        break;
-
-                    case sf::Keyboard::D:
-                        break;
-
-                    default:
-                        break;
-                }
-                break;
-            }
-
-            case sf::Event::Resized:
-                // m_window.setView();
-                break;
 
             case sf::Event::MouseButtonPressed:
-            {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
                 {
                     t_mouseCircle.setPosition((sf::Vector2f)sf::Mouse::getPosition(m_window));
@@ -136,13 +109,11 @@ void Testing::handleInput()
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                 {
                     t_dragSelect.onPressed();
+                    t_drag.onClick(sf::Mouse::getPosition(m_window));
                 }
-
                 break;
-            }
 
             case sf::Event::MouseButtonReleased:
-            {
                 // select tiles that are highlighted
                 if (t_dragSelect.isHighlighted())
                 {
@@ -155,6 +126,7 @@ void Testing::handleInput()
 
                 // turn off dragselect highlight
                 t_dragSelect.onReleased();
+                t_drag.onReleased();
 
                 // t_mouseCircle.setPosition((sf::Vector2f)sf::Mouse::getPosition(m_window));
 
@@ -171,18 +143,100 @@ void Testing::handleInput()
                 // {
                 //     them[i]->data()->isSelected() ? them[i]->data()->deselect() : them[i]->data()->select();
                 // }
-
-                
                 break;
-            }
+
+            case sf::Event::KeyPressed:
+                switch (curEvent.key.code)
+                {
+                    case sf::Keyboard::Escape:
+                        m_isQuitting = true;
+                        break;
+
+                    case sf::Keyboard::Up:
+                        m_view.move(0, 500 * m_time.asSeconds());
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
 
             case sf::Event::KeyReleased:
+                break;
+
+            case sf::Event::Resized:
+                // m_window.setView();
                 break;
 
             default:
                 break;
         }
     }
+
+    // t_move(sf::Keyboard::W, sf::Keyboard::S, sf::Keyboard::A, sf::Keyboard::D, t_player);
+    float vel = 500 * m_time.asSeconds();
+    float pi = std::acos(-1);
+    float dir;
+    bool isMoving = false;
+    // 1key
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        dir = 0 * pi / 4;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        dir = 2 * pi / 4;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        dir = 4 * pi / 4;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        dir = 6 * pi / 4;
+    // 2keys
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        dir = 1 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        dir = 3 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        dir = 5 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        dir = 7 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        isMoving = false;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        isMoving = false;
+
+    // 3keys
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    {
+        dir = 0 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        dir = 2 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    {
+        dir = 4 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        dir = 6 * pi / 4;
+        isMoving = true;
+    }
+
+    if (isMoving)
+        t_player.move(sf::Vector2f(std::cos(dir) * vel, std::sin(dir) * vel));
 }
 
 void Testing::update()
@@ -192,6 +246,10 @@ void Testing::update()
 
     // combination of mouse hover and highlight hover
     t_gameBoard->generalHover(sf::Mouse::getPosition(m_window),t_dragSelect.getGlobalBounds());
+
+    // t_drag.drag(sf::Mouse::getPosition(m_window));
+    t_drag.drag(sf::Mouse::getPosition(m_window));
+
 }
 
 void Testing::render()
@@ -202,8 +260,12 @@ void Testing::render()
 
     m_window.draw(*t_gameBoard);
 
+    m_window.draw(t_drag);
+    m_window.draw(t_player);
+    
     m_window.draw(t_mouseCircle);
     m_window.draw(t_dragSelect);
+
 
     m_window.display();
 }
@@ -211,5 +273,73 @@ void Testing::render()
 bool Testing::quitting() { return m_isQuitting; }
 
 void Testing::quit() { m_window.close(); }
+
+void Testing::resetTimer() { m_time = m_clock.restart(); }
+
+void Testing::t_move(sf::Keyboard::Key _up, sf::Keyboard::Key _down, sf::Keyboard::Key _left, sf::Keyboard::Key _right, sf::Transformable movable)
+{
+    float vel = 500 * m_time.asSeconds();
+    float pi = std::acos(-1);
+    float dir;
+    bool isMoving = false;
+    // 1key
+    if (sf::Keyboard::isKeyPressed(_right))
+        dir = 0 * pi / 4;
+    if (sf::Keyboard::isKeyPressed(_down))
+        dir = 2 * pi / 4;
+    if (sf::Keyboard::isKeyPressed(_left))
+        dir = 4 * pi / 4;
+    if (sf::Keyboard::isKeyPressed(_up))
+        dir = 6 * pi / 4;
+    // 2keys
+    if (sf::Keyboard::isKeyPressed(_down) && sf::Keyboard::isKeyPressed(_right))
+    {
+        dir = 1 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(_down) && sf::Keyboard::isKeyPressed(_left))
+    {
+        dir = 3 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_left))
+    {
+        dir = 5 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_right))
+    {
+        dir = 7 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_down))
+        isMoving = false;
+    if (sf::Keyboard::isKeyPressed(_left) && sf::Keyboard::isKeyPressed(_right))
+        isMoving = false;
+
+    // 3keys
+    if (sf::Keyboard::isKeyPressed(_right) && sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_down))
+    {
+        dir = 0 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(_down) && sf::Keyboard::isKeyPressed(_left) && sf::Keyboard::isKeyPressed(_right))
+    {
+        dir = 2 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(_left) && sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_down))
+    {
+        dir = 4 * pi / 4;
+        isMoving = true;
+    }
+    if (sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_left) && sf::Keyboard::isKeyPressed(_right))
+    {
+        dir = 6 * pi / 4;
+        isMoving = true;
+    }
+
+    if (isMoving) movable.move(sf::Vector2f(std::cos(dir) * vel, std::sin(dir) * vel));
+}
 
 #endif
