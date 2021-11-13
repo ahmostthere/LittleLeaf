@@ -42,10 +42,10 @@ void NodeStack<T>::pop()
 {
     if (!empty())
     {
-        Node<T> *temp = m_top;
+        Node<T> *nodeToRemove = m_top;
         m_top = m_top->next();
         m_size--;
-        delete temp;
+        delete nodeToRemove;
     }
 }
 

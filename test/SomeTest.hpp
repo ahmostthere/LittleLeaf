@@ -8,10 +8,12 @@
 #include "Quad.hpp"
 #include "DragSelect.hpp"
 #include "Draggable.hpp"
+#include "Stack.hpp"
 #include "Tile.hpp"
 #include "TileBoard.hpp"
 #include <iostream>
 #include <cmath>
+#include <random>
 
 // #define WIN_WIDTH 480
 // #define WIN_HEIGHT 270
@@ -30,6 +32,7 @@ public:
     static DragSelect t_dragSelect;
     static Draggable t_drag;
     static sf::CircleShape t_player;
+    static NodeStack<sf::Keyboard::Key> t_stack;
     
     static sf::RenderWindow m_window;
     static sf::Time m_time;
@@ -50,6 +53,7 @@ public:
 TileBoard *Testing::t_gameBoard;
 sf::CircleShape Testing::t_mouseCircle;
 sf::CircleShape Testing::t_player(30);
+NodeStack<sf::Keyboard::Key> Testing::t_stack;
 
 sf::RenderWindow Testing::m_window;
 sf::Time Testing::m_time;
@@ -77,13 +81,11 @@ void Testing::load()
 
     m_isQuitting = false;
 
-    m_view.setCenter(sf::Vector2f(WIN_WIDTH/2, WIN_HEIGHT/2));
-    m_view.setSize(WIN_WIDTH, WIN_HEIGHT);
     m_window.create(
         sf::VideoMode(WIN_WIDTH, WIN_HEIGHT), "TEST",
         sf::Style::Close);
     m_window.setFramerateLimit(60);
-    m_window.setView(m_view);
+    m_view = m_window.getDefaultView();    
     
 }
 
@@ -153,15 +155,25 @@ void Testing::handleInput()
                         break;
 
                     case sf::Keyboard::Up:
-                        m_view.move(0, 500 * m_time.asSeconds());
+                        std::cout << "Up Pressed" << std::endl;
+                        m_view.move(0, 5);
+                        m_window.setView(m_view);
                         break;
 
                     default:
                         break;
                 }
+                if (!t_stack.contains(curEvent.key.code))
+                {
+                    t_stack.push(curEvent.key.code);
+                }
+                std::cout << "Key Pressed " << t_stack.size() << std::endl;
+                std::cout << t_stack << std::endl;
                 break;
 
             case sf::Event::KeyReleased:
+                t_stack.remove(curEvent.key.code);
+                std::cout << "Key Released " << t_stack.size() << std::endl;
                 break;
 
             case sf::Event::Resized:
@@ -180,13 +192,25 @@ void Testing::handleInput()
     bool isMoving = false;
     // 1key
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
         dir = 0 * pi / 4;
+        isMoving = true;   
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    {
         dir = 2 * pi / 4;
+        isMoving = true;
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
         dir = 4 * pi / 4;
+        isMoving = true;
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+    {
         dir = 6 * pi / 4;
+        isMoving = true;
+    }
     // 2keys
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
@@ -209,10 +233,13 @@ void Testing::handleInput()
         isMoving = true;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    {
         isMoving = false;
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
         isMoving = false;
-
+    }
     // 3keys
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
@@ -236,7 +263,9 @@ void Testing::handleInput()
     }
 
     if (isMoving)
+    {
         t_player.move(sf::Vector2f(std::cos(dir) * vel, std::sin(dir) * vel));
+    }
 }
 
 void Testing::update()
