@@ -6,7 +6,7 @@
 
 
 template <typename T>
-class NodeStack
+class Stack
 {
 private:
     class Node
@@ -58,7 +58,7 @@ private:
     Node *m_top;
 
 public:
-    NodeStack() : m_size(0), m_top(nullptr) {}
+    Stack() : m_size(0), m_top(nullptr) {}
 
     int size() const
     {
@@ -144,7 +144,7 @@ public:
         m_size++;
     }
 
-    bool contains(const T &data)
+    bool contains(T data)
     {
         for (Node *nodeToCheck = m_top; nodeToCheck != nullptr; nodeToCheck = nodeToCheck->next())
         {   
@@ -190,7 +190,7 @@ public:
     }
 
     // used only for testing purposes
-    friend std::ostream &operator<<(std::ostream &os, const NodeStack<T> &_stack)
+    friend std::ostream &operator<<(std::ostream &os, const Stack<T> &_stack)
     {
         os << "[top]-->";
         if (!_stack.empty())
@@ -207,6 +207,6 @@ public:
     }
 };
 
-typedef NodeStack<int> Stack_i;
+typedef Stack<int> Stack_i;
 
 #endif

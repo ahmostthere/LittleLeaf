@@ -11,6 +11,7 @@
 #include "Stack.hpp"
 #include "Tile.hpp"
 #include "TileBoard.hpp"
+#include "TestPlayer.hpp"
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -31,8 +32,8 @@ public:
     static sf::RectangleShape t_negativeSquare;
     static DragSelect t_dragSelect;
     static Draggable t_drag;
-    static sf::CircleShape t_player;
-    static NodeStack<sf::Keyboard::Key> t_stack;
+    static TestPlayer t_player;
+    static Stack<sf::Keyboard::Key> t_stack;
     
     static sf::RenderWindow m_window;
     static sf::Time m_time;
@@ -47,13 +48,12 @@ public:
     static bool quitting();
     static void quit();
     static void resetTimer();
-    static void t_move(sf::Keyboard::Key _up, sf::Keyboard::Key _down, sf::Keyboard::Key _left, sf::Keyboard::Key _right, sf::Transformable movable);
 };
 
 TileBoard *Testing::t_gameBoard;
 sf::CircleShape Testing::t_mouseCircle;
-sf::CircleShape Testing::t_player(30);
-NodeStack<sf::Keyboard::Key> Testing::t_stack;
+TestPlayer Testing::t_player(30);
+Stack<sf::Keyboard::Key> Testing::t_stack;
 
 sf::RenderWindow Testing::m_window;
 sf::Time Testing::m_time;
@@ -76,6 +76,7 @@ void Testing::load()
 
     t_player.setFillColor(sf::Color(0, 255, 255));
     t_player.setPosition(WIN_WIDTH/2, WIN_HEIGHT/2);
+    t_player.initMouseMovePosition(t_player.getPosition());
 
     t_drag.setPosition(200, 200);
 
@@ -106,6 +107,7 @@ void Testing::handleInput()
                 {
                     t_mouseCircle.setPosition((sf::Vector2f)sf::Mouse::getPosition(m_window));
                     t_gameBoard->searchPoint(t_mouseCircle.getPosition())->isSelected() ? t_gameBoard->searchPoint(t_mouseCircle.getPosition())->deselect() : t_gameBoard->searchPoint(t_mouseCircle.getPosition())->select();
+                    t_player.setMouseMovePosition(sf::Mouse::getPosition(m_window));
                 }
 
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -156,9 +158,11 @@ void Testing::handleInput()
 
                     case sf::Keyboard::Up:
                         std::cout << "Up Pressed" << std::endl;
-                        m_view.move(0, 5);
-                        m_window.setView(m_view);
+                        
+                        
                         break;
+
+                    
 
                     default:
                         break;
@@ -185,87 +189,10 @@ void Testing::handleInput()
         }
     }
 
-    // t_move(sf::Keyboard::W, sf::Keyboard::S, sf::Keyboard::A, sf::Keyboard::D, t_player);
-    float vel = 500 * m_time.asSeconds();
-    float pi = std::acos(-1);
-    float dir;
-    bool isMoving = false;
-    // 1key
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        dir = 0 * pi / 4;
-        isMoving = true;   
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-    {
-        dir = 2 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        dir = 4 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-    {
-        dir = 6 * pi / 4;
-        isMoving = true;
-    }
-    // 2keys
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        dir = 1 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        dir = 3 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        dir = 5 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        dir = 7 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-    {
-        isMoving = false;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        isMoving = false;
-    }
-    // 3keys
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-    {
-        dir = 0 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        dir = 2 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-    {
-        dir = 4 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Keyboard::isKeyPressed(sf::Keyboard::A) && sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        dir = 6 * pi / 4;
-        isMoving = true;
-    }
-
-    if (isMoving)
-    {
-        t_player.move(sf::Vector2f(std::cos(dir) * vel, std::sin(dir) * vel));
-    }
+    // t_move(t_player);
+    // keyMove(t_player, t_stack);
+    t_player.keyMove(t_stack, 500 * m_time.asSeconds());
+    t_player.mouseMove(500 * m_time.asSeconds(), sf::Vector2f(t_player.getRadius(), t_player.getRadius()));
 }
 
 void Testing::update()
@@ -279,6 +206,13 @@ void Testing::update()
     // t_drag.drag(sf::Mouse::getPosition(m_window));
     t_drag.drag(sf::Mouse::getPosition(m_window));
 
+    std::cout << "mouse position" << sf::Mouse::getPosition(m_window).x << ", " << sf::Mouse::getPosition(m_window).y << std::endl;
+
+    if (t_stack.contains(sf::Keyboard::Up))
+    {
+        m_view.move(0, 500 * m_time.asSeconds());
+    }
+    m_window.setView(m_view);
 }
 
 void Testing::render()
@@ -304,71 +238,5 @@ bool Testing::quitting() { return m_isQuitting; }
 void Testing::quit() { m_window.close(); }
 
 void Testing::resetTimer() { m_time = m_clock.restart(); }
-
-void Testing::t_move(sf::Keyboard::Key _up, sf::Keyboard::Key _down, sf::Keyboard::Key _left, sf::Keyboard::Key _right, sf::Transformable movable)
-{
-    float vel = 500 * m_time.asSeconds();
-    float pi = std::acos(-1);
-    float dir;
-    bool isMoving = false;
-    // 1key
-    if (sf::Keyboard::isKeyPressed(_right))
-        dir = 0 * pi / 4;
-    if (sf::Keyboard::isKeyPressed(_down))
-        dir = 2 * pi / 4;
-    if (sf::Keyboard::isKeyPressed(_left))
-        dir = 4 * pi / 4;
-    if (sf::Keyboard::isKeyPressed(_up))
-        dir = 6 * pi / 4;
-    // 2keys
-    if (sf::Keyboard::isKeyPressed(_down) && sf::Keyboard::isKeyPressed(_right))
-    {
-        dir = 1 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(_down) && sf::Keyboard::isKeyPressed(_left))
-    {
-        dir = 3 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_left))
-    {
-        dir = 5 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_right))
-    {
-        dir = 7 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_down))
-        isMoving = false;
-    if (sf::Keyboard::isKeyPressed(_left) && sf::Keyboard::isKeyPressed(_right))
-        isMoving = false;
-
-    // 3keys
-    if (sf::Keyboard::isKeyPressed(_right) && sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_down))
-    {
-        dir = 0 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(_down) && sf::Keyboard::isKeyPressed(_left) && sf::Keyboard::isKeyPressed(_right))
-    {
-        dir = 2 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(_left) && sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_down))
-    {
-        dir = 4 * pi / 4;
-        isMoving = true;
-    }
-    if (sf::Keyboard::isKeyPressed(_up) && sf::Keyboard::isKeyPressed(_left) && sf::Keyboard::isKeyPressed(_right))
-    {
-        dir = 6 * pi / 4;
-        isMoving = true;
-    }
-
-    if (isMoving) movable.move(sf::Vector2f(std::cos(dir) * vel, std::sin(dir) * vel));
-}
 
 #endif

@@ -38,6 +38,7 @@ clean:
 	@echo " $(RM) -r $(BUILDDIR) $(TARGET) $(TSTTARG)"; $(RM) -r $(BUILDDIR) $(TARGET) $(TSTTARG)
 
 # Tests
+t: test
 test: $(TSTOBJ)
 	$(CC) $(C11) $^ -o $(TSTTARG) $(LIB)
 
