@@ -21,7 +21,7 @@ DESCRIPTION
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include "Button.hpp"
+#include "GameInterface/Button.hpp"
 
 class GameState
 {

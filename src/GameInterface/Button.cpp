@@ -1,4 +1,4 @@
-#include "Button.hpp"
+#include "GameInterface/Button.hpp"
 
 Button::Button() : isPressed(false),
                    m_Sprite(),

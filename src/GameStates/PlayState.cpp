@@ -15,7 +15,7 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
-#include "PlayState.hpp"
+#include "GameStates/PlayState.hpp"
 
 #define PI std::acos(-1)
 

@@ -19,8 +19,8 @@ DESCRIPTION
 #define PLAY_STATE
 
 #include "GameState.hpp"
-#include "Player.hpp"
-#include "DragSelect.hpp"
+#include "GameObjects/Player.hpp"
+#include "GameInterface/DragSelect.hpp"
 
 #define PLAY_WIN_WIDTH 1920
 #define PLAY_WIN_HEIGHT 1080

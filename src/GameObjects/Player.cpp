@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Player.hpp"
+#include "GameObjects/Player.hpp"
 #include <cmath>
 #define PI std::acos(-1)
 #define DEFAULT_SPEED 500

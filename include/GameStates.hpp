@@ -18,9 +18,9 @@ DESCRIPTION
 #ifndef GAME_STATES_HPP
 #define GAME_STATES_HPP
 
-#include "GameState.hpp"
-#include "MenuState.hpp"
-#include "PlayState.hpp"
-#include "PauseState.hpp"
+#include "GameStates/GameState.hpp"
+#include "GameStates/MenuState.hpp"
+#include "GameStates/PlayState.hpp"
+#include "GameStates/PauseState.hpp"
 
 #endif //GAME_STATES

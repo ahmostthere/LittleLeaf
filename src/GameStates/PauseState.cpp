@@ -15,7 +15,7 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
-#include "PauseState.hpp"
+#include "GameStates/PauseState.hpp"
 
 PauseState::~PauseState() {}
 

@@ -15,7 +15,7 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
-#include "GameState.hpp"
+#include "GameStates/GameState.hpp"
 
 GameState::~GameState() {}
 

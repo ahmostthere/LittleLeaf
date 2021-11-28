@@ -1,4 +1,4 @@
-#include "DragSelect.hpp"
+#include "GameInterface/DragSelect.hpp"
 
 DragSelect::DragSelect() : m_isHighlighted(false), m_startPos(sf::Vector2f(0, 0)), m_endPos(sf::Vector2f(0, 0))
 {

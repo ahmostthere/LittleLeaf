@@ -15,7 +15,7 @@ DESCRIPTION
 -----------------------------------------------------------------------------------------------
 
 */
-#include "MenuState.hpp"
+#include "GameStates/MenuState.hpp"
 
 MenuState::MenuState()
 {
