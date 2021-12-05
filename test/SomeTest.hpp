@@ -34,6 +34,7 @@ public:
     static Draggable t_drag;
     static TestPlayer t_player;
     static Stack<sf::Keyboard::Key> t_stack;
+    static sf::VertexArray t_rect;
     
     static sf::RenderWindow m_window;
     static sf::Time m_time;
@@ -54,6 +55,7 @@ TileBoard *Testing::t_gameBoard;
 sf::CircleShape Testing::t_mouseCircle;
 TestPlayer Testing::t_player(30);
 Stack<sf::Keyboard::Key> Testing::t_stack;
+sf::VertexArray Testing::t_rect;
 
 sf::RenderWindow Testing::m_window;
 sf::Time Testing::m_time;
@@ -63,16 +65,51 @@ bool Testing::m_isQuitting;
 DragSelect Testing::t_dragSelect(&m_window);
 Draggable Testing::t_drag(sf::Vector2f(80, 80));
 
+
 void Testing::load()
 {
     // Load / initialize other static variables
 
     t_gameBoard = new TileBoard(WIN_WIDTH / TILE_SIZE, WIN_HEIGHT / TILE_SIZE, TILE_SIZE);
 
-    t_mouseCircle.setRadius(10);
+    t_mouseCircle.setRadius(100);
     t_mouseCircle.setFillColor(sf::Color(220, 0, 0, 55));
     t_mouseCircle.setOrigin(sf::Vector2f(t_mouseCircle.getRadius(), t_mouseCircle.getRadius()));
+    t_mouseCircle.setPosition(300, 300);
 
+
+
+    t_rect.setPrimitiveType(sf::TriangleFan);
+    float pi = std::acos(-1);
+    sf::Vector2f pos(200, 200);
+    float rad = 200;
+    float slices = 100;
+    float sliceTheta = 2 * pi / slices;
+    float percentage = .30;
+    sf::Uint8 col = 255;
+    std::cout << 0xE8 << std::endl;
+    std::cout << 0x40 << std::endl;
+    std::cout << 0x94 << std::endl;
+    std::cout << (0xE8 + 0x40)/2 << std::endl;
+
+    // t_rect.append(sf::Vertex(pos, sf::Color(0x40, 0xC9, 0xFF)));                                                                                                                        // center
+    t_rect.append(sf::Vertex(pos, sf::Color::Transparent));                                                                                                                        // center
+    for (int i = 0; i <= slices; i++)
+    {
+        t_rect.append(sf::Vertex(pos + sf::Vector2f(cos(2 * pi * (i - 1) / slices) * rad, sin(2 * pi * (i - 1) / slices) * rad), sf::Color(0xE8, 0x1C, 0xFF, 0xFF/2))); // start
+        // t_rect.append(sf::Vertex(pos + sf::Vector2f(cos(2 * pi * i / slices) * rad, sin(2 * pi * i / slices) * rad), sf::Color(0xE8, 0x1C, 0xFF, 0xFF/2)));             // start + slice
+
+        // t_rect.append(sf::Vertex(pos + sf::Vector2f(cos(2 * pi * i / slices) * rad * percentage, sin(2 * pi * i / slices) * rad * percentage), sf::Color(255, 0, 0, 255 / 2)));             // start + slice
+        // t_rect.append(sf::Vertex(pos + sf::Vector2f(cos(2 * pi * (i - 1) / slices) * rad * percentage, sin(2 * pi * (i - 1) / slices) * rad * percentage), sf::Color(255, 0, 0, 255 / 2))); // start
+        // t_rect.append(sf::Vertex(pos + sf::Vector2f(cos(2 * pi * (i - 1) / slices) * rad * percentage, sin(2 * pi * (i - 1) / slices) * rad * percentage), sf::Color(255, 0, 0, 255 / 2))); // start
+        // t_rect.append(sf::Vertex(pos + sf::Vector2f(cos(2 * pi * i / slices) * rad * percentage, sin(2 * pi * i / slices) * rad * percentage), sf::Color(255, 0, 0, 255 / 2)));             // start + slice
+
+        // t_rect.append(sf::Vertex(pos, sf::Color::Transparent));                                                                                                                        // center
+        // t_rect.append(sf::Vertex(pos, sf::Color::Transparent));   
+                                                                                                                             // center
+        // t_rect.append(sf::Vertex(pos, sf::Color(0x40, 0xC9, 0xFF)));                                                                                                                         // center
+        // t_rect.append(sf::Vertex(pos, sf::Color(0x40, 0xC9, 0xFF)));                                                                                                                         // center
+    }
 
     t_player.setFillColor(sf::Color(0, 255, 255));
     t_player.setPosition(WIN_WIDTH/2, WIN_HEIGHT/2);
@@ -228,7 +265,8 @@ void Testing::render()
     
     m_window.draw(t_mouseCircle);
     m_window.draw(t_dragSelect);
-
+    m_window.draw(t_rect);
+    
 
     m_window.display();
 }

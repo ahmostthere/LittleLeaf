@@ -33,6 +33,8 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 # $@ -- full name of current target 
 # $$ -- name of first dependency
 
+c: cl
+cl: clean
 clean:
 	@echo " Cleaning..."; 
 	@echo " $(RM) -r $(BUILDDIR) $(TARGET) $(TSTTARG)"; $(RM) -r $(BUILDDIR) $(TARGET) $(TSTTARG)
@@ -45,5 +47,6 @@ test: $(TSTOBJ)
 $(BUILDDIR)/%.o: $(TSTDIR)/%.cpp
 	@mkdir -p $(BUILDDIR)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
 
 .PHONY: clean
