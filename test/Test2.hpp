@@ -71,13 +71,15 @@ sf::VertexArray rectToVertexArray(const sf::FloatRect &rect)
 // get
 sf::VertexArray getBoundsMultiple(std::vector<sf::VertexArray> vertexArrays)
 {
-
+    sf::VertexArray retVal;
+    return retVal;
 }
 
 
 
 sf::VertexArray insideBoundBox(sf::VertexArray shape)
 {
+    sf::VertexArray retVal;
     sf::VertexArray shapeBounds = rectToVertexArray(shape.getBounds());
     struct vertexPair
     {
@@ -133,6 +135,7 @@ sf::VertexArray insideBoundBox(sf::VertexArray shape)
        
     }
 
+    return retVal;
 }
 
 sf::VertexArray outsideBoundBox(sf::VertexArray fog, sf::VertexArray shape)

@@ -29,7 +29,7 @@ $(TARGET): $(OBJECTS)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $(OBJECTS))
-	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	@echo " $(CC) $(C11) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
 # $@ -- full name of current target 
 # $$ -- name of first dependency
 
@@ -46,7 +46,7 @@ test: $(TSTOBJ)
 
 $(BUILDDIR)/%.o: $(TSTDIR)/%.cpp
 	@mkdir -p $(BUILDDIR)
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(C11) $(CFLAGS) $(INC) -c -o $@ $<
 
 
 .PHONY: clean
