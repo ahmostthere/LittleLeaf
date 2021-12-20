@@ -1,11 +1,14 @@
 // #include "SomeTest.hpp"
-#include "Test2.hpp"
+// #include "Test2.hpp"
+#include "SightTest.hpp"
+
+
 
 void start() 
 {
     Testing::load();
 
-    while(!Testing::quitting()) 
+    while(!Testing::isQuitting()) 
     {
         Testing::resetTimer();
         Testing::handleInput();
