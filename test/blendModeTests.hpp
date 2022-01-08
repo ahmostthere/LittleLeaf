@@ -59,7 +59,11 @@ int main2()
     sf::Texture pic;
     pic.loadFromFile("assets/menuSplash.png");
 
+    sf::Texture pic2;
+    pic2.loadFromFile("assets/arrowButtons.png");
+
     std::vector<sf::Vector2f> lights;
+    std::vector<sf::Vector2f> lightsAlpha;
 
     const sf::Color colors[3] = {sf::Color::Red, sf::Color::Green, sf::Color::Blue};
 
@@ -72,11 +76,25 @@ int main2()
                 app.close();
 
             if (eve.type == sf::Event::MouseButtonPressed)
-                lights.push_back(app.mapPixelToCoords(sf::Vector2i(eve.mouseButton.x, eve.mouseButton.y)));
+            {
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+                    lights.push_back(app.mapPixelToCoords(sf::Vector2i(eve.mouseButton.x, eve.mouseButton.y)));
+                }
+            }
 
             if (eve.type == sf::Event::KeyPressed)
-                if (eve.key.code == sf::Keyboard::Escape)
-                    app.close();
+            {
+                switch (eve.key.code)
+                {
+                    case sf::Keyboard::Escape:
+                        app.close();
+                        break;
+
+                    case sf::Keyboard::Space:
+                        lightsAlpha.push_back(app.mapPixelToCoords(sf::Mouse::getPosition(app)));
+                        break;
+                }
+            }
         }
 
         app.clear();
@@ -114,7 +132,12 @@ int main2()
 
         tex.draw(sha2, sf::BlendAdd);
 
-
+        for (int i = 0; i < lightsAlpha.size(); ++i) 
+        {
+            sha2 = createVA(lightsAlpha[i], 250.f, sf::Color(0, 0, 0, 0x55), sf::Color(0xff, 0xff, 0xff, 0x55));
+            tex.draw(sha2, sf::BlendAlpha);
+            
+        }
 
         // add the lights together
         for (int i = 0; i < lights.size(); ++i)
@@ -122,17 +145,13 @@ int main2()
             sha2 = createVA(lights[i], 250.f, sf::Color::Transparent, colors[i % 3]);
             tex.draw(sha2, sf::BlendAdd);
         }
+        tex.draw(sf::Sprite(pic2), sf::BlendAlpha);
         tex.display();
-
-
-    
-
-
-
 
 
         // lit scene
         app.draw(sf::Sprite(pic));
+        // app.draw(sf::Sprite(pic2));
 
         // multiply by light
         app.draw(sf::Sprite(tex.getTexture()), sf::BlendMultiply);
