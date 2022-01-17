@@ -2,6 +2,7 @@
 // #include "Test2.hpp"
 #include "SightTest.hpp"
 #include "blendModeTests.hpp"
+#include "CallbackTest.hpp"
 
 
 
@@ -22,6 +23,7 @@ void start()
 int main() 
 {
     // start();
-    main2();
+    // main2();
+    printCallback(5, &callback);
     return 0;
 }
