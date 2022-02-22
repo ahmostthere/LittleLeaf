@@ -1,9 +1,9 @@
 // #include "SomeTest.hpp"
 // #include "Test2.hpp"
-#include "SightTest.hpp"
-#include "blendModeTests.hpp"
-#include "CallbackTest.hpp"
-
+// #include "SightTest.hpp"
+// #include "blendModeTests.hpp"
+// #include "CallbackTest.hpp"
+#include "AnimationsTest.hpp"
 
 
 void start() 
@@ -22,8 +22,8 @@ void start()
 
 int main() 
 {
-    // start();
+    start();
     // main2();
-    printCallback(5, &callback);
+    // printCallback(5, &callback);
     return 0;
 }

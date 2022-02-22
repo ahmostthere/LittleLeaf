@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include <iostream>
+#include <cmath>
+#include <random>
 
 #define WIN_WIDTH 1920
 #define WIN_HEIGHT 1080
@@ -50,29 +53,29 @@ void Test::load()
 
 void Test::handleInput()
 {
-    sf::Event curEvent;
-    while (m_window.pollEvent(curEvent))
-    {
-        switch (curEvent.type)
-        {
-        case sf::Event::Closed:
-            m_isQuitting = true;
-            break;
+    // sf::Event curEvent;
+    // while (m_window.pollEvent(curEvent))
+    // {
+    //     switch (curEvent.type)
+    //     {
+    //     case sf::Event::Closed:
+    //         m_isQuitting = true;
+    //         break;
 
-        case sf::Event::KeyPressed:
-            switch (curEvent.key.code)
-            {
-            case sf::Keyboard::Escape:
-                m_isQuitting = true;
-                break;
-            default:
-                break;
-            }
-            break;
-        default:
-            break;
-        }
-    }
+    //     case sf::Event::KeyPressed:
+    //         switch (curEvent.key.code)
+    //         {
+    //         case sf::Keyboard::Escape:
+    //             m_isQuitting = true;
+    //             break;
+    //         default:
+    //             break;
+    //         }
+    //         break;
+    //     default:
+    //         break;
+    //     }
+    // }
 }
 
 void Test::update()

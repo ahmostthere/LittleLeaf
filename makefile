@@ -15,7 +15,7 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 
 CFLAGS := -g -Wall
 # LIB := -L lib -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-LIB := -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+LIB := -L lib -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 INC := -I include -I assets
 
 TSTDIR := test
@@ -25,11 +25,11 @@ TSTOBJ := $(patsubst $(TSTDIR)/%,$(BUILDDIR)/%,$(TSTSRC:.$(SRCEXT)=.o))
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
-	@echo " $(CC) $(C11) $^ -o $(TARGET) $(LIB)"; $(CC) $(C11) $^ -o $(TARGET) $(LIB)
+	@$(CC) $(C11) $^ -o $(TARGET) $(LIB)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $(OBJECTS))
-	@echo " $(CC) $(C11) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	@$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 # $@ -- full name of current target 
 # $$ -- name of first dependency
 
@@ -37,16 +37,16 @@ c: cl
 cl: clean
 clean:
 	@echo " Cleaning..."; 
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET) $(TSTTARG)"; $(RM) -r $(BUILDDIR) $(TARGET) $(TSTTARG)
+	@$(RM) -r $(BUILDDIR) $(TARGET) $(TSTTARG)
 
 # Tests
 t: test
 test: $(TSTOBJ)
-	$(CC) $(C11) $^ -o $(TSTTARG) $(LIB)
+	@$(CC) $(C11) $^ -o $(TSTTARG) $(LIB)
 
 $(BUILDDIR)/%.o: $(TSTDIR)/%.cpp
 	@mkdir -p $(BUILDDIR)
-	$(CC) $(C11) $(CFLAGS) $(INC) -c -o $@ $<
+	@$(CC) $(C11) $(CFLAGS) $(INC) -c -o $@ $<
 
 
 .PHONY: clean
