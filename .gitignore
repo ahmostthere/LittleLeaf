@@ -9,5 +9,8 @@ makefile
 
 run.sh
 add_file.sh
+r
+b
+cl
 
 SFML/*

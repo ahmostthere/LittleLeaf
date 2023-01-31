@@ -29,7 +29,7 @@ $(TARGET): $(OBJECTS)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $(OBJECTS))
-	@$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	@$(CC) $(C11) $(CFLAGS) $(INC) -c -o $@ $<
 # $@ -- full name of current target 
 # $$ -- name of first dependency
 
